@@ -35,8 +35,16 @@ SDL_Texture* load_texture(SDL_Renderer *renderer, char *file) {
 void init_players() {
     int i;
     for (i = 0; i < MAX_PLAYERS; i++) {
-        players[i].position.x = SPAWN_X;
-        players[i].position.y = SPAWN_Y;
+        if (i == 0)
+        {
+            players[i].position.x = SPAWN_X;
+            players[i].position.y = SPAWN_Y;
+        }else{
+            players[i].position.x = SPAWN_A;
+            players[i].position.y = SPAWN_B;
+        }
+        // players[i].position.x = SPAWN_A;
+        // players[i].position.y = SPAWN_B;
         players[i].position.w = PLAYER_WIDTH;
         players[i].position.h = PLAYER_HEIGHT;
         players[i].left_key = SDLK_LEFT;
@@ -95,7 +103,8 @@ void* client_loop(void *arg) {
     }
 }
 
-int main(){
+int main(int argc, char** argv){
+    int seed = atoi(argv[1]);
     struct sockaddr_in server_addr, client_addr;
     int sock_server, sock_client;
     char *server_ip_addr = NULL;
@@ -134,7 +143,7 @@ int main(){
         SDL_Quit();
         return 1;
     }
-    mapper = get_map_texture(renderer);
+    mapper = get_map_texture(renderer, seed);
     tex = load_texture(renderer, "resources/player.bmp");
     bullet = load_texture(renderer, "resources/bullet.bmp");
     powerup= load_texture(renderer, "resources/bullet.bmp");
