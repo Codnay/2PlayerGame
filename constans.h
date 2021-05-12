@@ -23,6 +23,8 @@
 #define BUF_MAX 256
 #define SPAWN_X 32
 #define SPAWN_Y 416
+#define SPAWN_A 544
+#define SPAWN_B 32
 #define LEFT_KEY 0x01
 #define RIGHT_KEY 0x02
 #define UP_KEY 0x04
@@ -32,3 +34,4 @@
 #define POWERUP_HEIGHT 10
 
 #endif
+
