@@ -15,7 +15,9 @@
 #define PLAYER_HEIGHT 16
 #define BULLET_HEIGHT 8
 #define BULLET_WIDTH 8
-#define MAX_PLAYERS 2
+#define MAX_PLAYERS 10
+#define SPAWN_A 544
+#define SPAWN_B 32
 #define CLIENT_FRAME_TIME 15
 #define SERVER_FRAME_TIME 15
 #define X_AXIS 1
@@ -23,8 +25,6 @@
 #define BUF_MAX 256
 #define SPAWN_X 32
 #define SPAWN_Y 416
-#define SPAWN_A 544
-#define SPAWN_B 32
 #define LEFT_KEY 0x01
 #define RIGHT_KEY 0x02
 #define UP_KEY 0x04
@@ -32,6 +32,7 @@
 #define ATTACK_KEY 0x10
 #define POWERUP_WIDTH 10
 #define POWERUP_HEIGHT 10
+#define POWERUP_SPAWNTIME 3000
+#define MAX_POWERUP 5
 
 #endif
-

@@ -223,9 +223,15 @@ int main(int argc, char** argv){
                 check =check+1;
             }
 
+             if((current_time- last_time)>POWERUP_SPAWNTIME){
+
+                last_time= current_time;
+                check =check+1;
+                int a= (rand()%15)+1;
+                powerup_pos_arr[(check-1)%MAX_POWERUP]= a;
+            }
+
              if (check>0){
-                 int a= rand()%15;
-                 powerup_pos_vec.push_back(a);
                  for(int i=0; i<check; i++){
                     //int a= rand()%15;
                     // for(int j=0; j<15; j++ ){
@@ -233,9 +239,14 @@ int main(int argc, char** argv){
 
                     //     }
                     // }
-                    powerup_pos.x= 23+ powerup_pos_vec[i] *10;
-                    powerup_pos.y= 23+ powerup_pos_vec[i] *10;
-                    SDL_RenderCopy(renderer, powerup, NULL, &powerup_pos);
+                    if(powerup_pos_arr[i]!=0){
+                        powerup_pos.x= 23+ powerup_pos_arr[i%MAX_POWERUP] *10;
+                        powerup_pos.y= 23+ powerup_pos_arr[i%MAX_POWERUP] *10;
+                        SDL_RenderCopy(renderer, powerup, NULL, &powerup_pos);
+                    }
+
+                    //else {break;}
+
                 }
             }
 
