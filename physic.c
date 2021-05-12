@@ -323,7 +323,7 @@ void move_player(struct Player *player) {
     }
 }
 
-SDL_Texture* get_map_texture(SDL_Renderer *renderer) {
+SDL_Texture* get_map_texture(SDL_Renderer *renderer, int seed) {
     SDL_Surface *bitmap = NULL;
     SDL_Texture *map_texture;
     SDL_Rect rect;
@@ -337,7 +337,7 @@ SDL_Texture* get_map_texture(SDL_Renderer *renderer) {
 
     //---------------------------------------------------------
 
-    srand((unsigned int)time(NULL));
+    srand(seed);
     initialize();
     generate();
 
