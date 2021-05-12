@@ -24,8 +24,8 @@
 #define WHITE fprintf(outfile, "%c%c%c", 255,255,255)
 #define BLACK fprintf(outfile, "%c%c%c", 0,0,0)
 #define RED   fprintf(outfile, "%c%c%c", 0,0,255)
-#define xsize 15
-#define ysize 20
+#define xsize 9
+#define ysize 11
 
 #define nodeadend//generate a maze without any dead ends! (consequently, many solutions to maze)
 //#define prim    //enable this to generate mazes using prim's algorithm.
@@ -341,19 +341,47 @@ SDL_Texture* get_map_texture(SDL_Renderer *renderer) {
     initialize();
     generate();
 
-    for (int x = 0; x < xsize; ++x)
-    {
-        for (int y = 0; y < ysize; ++y)
-        {
-            if (MAZE[x][y].in == 1)
-            {
+
+
+    // for (int x = 1; x < xsize-1; ++x)
+    // {
+    //     for (int y = 1; y < ysize-1; ++y)
+    //     {
+    //         if (MAZE[x][y].up == 1)
+    //         {
+    //             map[x-1][y] = 1;
+    //         }else{
+    //             map[x-1][y] = 0;
+    //         }
+    //         if (MAZE[x][y].left == 1)
+    //         {
+    //             map[x][y-1] = 1;
+    //         }else{
+    //             map[x][y-1] = 0;
+    //         }
+    //     }
+    // }
+    int height = 19;
+    int width = 15;
+    for(int y = 0; y <= height - 1; y++){
+        for(int x = 0; x <= width - 1; x++){
+            if(x%2 == 1 && y%2 == 1){
+                if(MAZE[x/2+1][y/2+1].in) map[x][y] = 0; else map[x][y] = 1;
+            }else if(x%2 == 0 && y%2 == 0){
                 map[x][y] = 1;
-            }else{
-                map[x][y] = 0;
+            }else if(x%2 == 0 && y%2 == 1){
+                if(MAZE[x/2+1][y/2+1].left) map[x][y] = 1; else map[x][y] = 0;
+            }else if(x%2 == 1 && y%2 == 0){
+                if(MAZE[x/2+1][y/2+1].up) map[x][y] = 1; else map[x][y] = 0;
             }
         }
     }
-
+    for (int i = 0; i < 15; ++i)
+    {
+        map[i][19] = 1;
+    }
+    map[0][10] = 0;
+    map[0][9] = 0;
     //---------------------------------------------------------
 
     int i, j;
