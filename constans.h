@@ -15,7 +15,7 @@
 #define PLAYER_HEIGHT 16
 #define BULLET_HEIGHT 8
 #define BULLET_WIDTH 8
-#define MAX_PLAYERS 10
+#define MAX_PLAYERS 2
 #define CLIENT_FRAME_TIME 15
 #define SERVER_FRAME_TIME 15
 #define X_AXIS 1
