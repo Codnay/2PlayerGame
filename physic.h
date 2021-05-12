@@ -12,7 +12,7 @@ struct cell{
     int prevx, prevy; //The coordinates of the previous cell, used for backtracking.
 };
 void move_player(struct Player *player); 
-SDL_Texture* get_map_texture(SDL_Renderer *renderer);
+SDL_Texture* get_map_texture(SDL_Renderer *renderer, int seed);
 void move_bullets(struct node **bullets);
 int check_if_player_dies(struct Player *player, struct node **bullets, int *killer);
 
