@@ -244,7 +244,12 @@ void move_bullets(struct node **bullets) {
     int i = 0;
     while (next != NULL) {
         b = (struct Bullet*) next->data;
-        b->position.x += PLAYER_SPEED * b->face * 1;
+        //----------------------made a change here
+        if(b->face == 1 || b->face == -1){
+            b->position.x += PLAYER_SPEED * b->face * 1;
+        }else{
+            b->position.y += PLAYER_SPEED * (b->face/2) * 1;
+        }
         next = next->next;
         if (check_collisions(&b->position)) {
             erase_element(bullets, i);
@@ -288,17 +293,27 @@ void move_player(struct Player *player) {
         x_movement += PLAYER_SPEED;
         player->face = 1;
     }
+    //-------------------------------------------------------
     if (player->up) {
-        if (player->can_jump) {
-            player->can_jump = false;
-            player->y_speed = -PLAYER_JUMP_POWER;
-        }
+        y_movement -= PLAYER_SPEED;
+        player->face = -2;
     }
+    if (player->down) {
+        y_movement += PLAYER_SPEED;
+        player->face = 2;
+    }
+    //-------------------------------------------------------
+    // if (player->up) {
+    //     if (player->can_jump) {
+    //         player->can_jump = false;
+    //         player->y_speed = -PLAYER_JUMP_POWER;
+    //     }
+    // }
     
-    y_movement = player->y_speed / 3;
-    if (player->y_speed < MAX_VERTICAL_SPEED) {
-        player->y_speed += GRAVITY;
-    }
+    // y_movement = player->y_speed / 3;
+    // if (player->y_speed < MAX_VERTICAL_SPEED) {
+    //     player->y_speed += GRAVITY;
+    // }
 
     while (x_movement != 0 || y_movement != 0) {
         if (x_movement != 0 && move_and_check_collisions(&player->position, X_AXIS, x_movement)) {
@@ -309,15 +324,15 @@ void move_player(struct Player *player) {
 
         if (y_movement != 0 && move_and_check_collisions(&player->position, Y_AXIS, y_movement)) {
             decrement_abs(&y_movement);
-            player->can_jump = false;
+            // player->can_jump = false;
         } else {
-            if(y_movement > 0) {
-                player->can_jump = true;
-                player->y_speed = 0;
-            }
-            if(y_movement < 0) {
-                player->y_speed = 0;
-            }
+            // if(y_movement > 0) {
+            //     player->can_jump = true;
+            //     player->y_speed = 0;
+            // }
+            // if(y_movement < 0) {
+            //     player->y_speed = 0;
+            // }
             y_movement = 0;
         }
     }
@@ -380,8 +395,6 @@ SDL_Texture* get_map_texture(SDL_Renderer *renderer, int seed) {
     {
         map[i][19] = 1;
     }
-    map[0][10] = 0;
-    map[0][9] = 0;
     //---------------------------------------------------------
 
     int i, j;
