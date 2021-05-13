@@ -410,5 +410,15 @@ SDL_Texture* get_map_texture(SDL_Renderer *renderer, int seed) {
     SDL_SetRenderTarget(renderer, NULL);
     return map_texture;
 }
+
+int check_empty(int x_coor, int y_coor){
+    if(map[x_coor][y_coor]== 1){
+        return 0;
+    }
+
+    else{
+        return 1;
+    }
+}
     
 

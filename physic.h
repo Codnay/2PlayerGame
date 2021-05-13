@@ -11,6 +11,8 @@ struct cell{
     int left;//Does the wall to the left of this cell exist?
     int prevx, prevy; //The coordinates of the previous cell, used for backtracking.
 };
+int check_empty(int x_coor, int y_coor);
+int map[15][20];
 void move_player(struct Player *player); 
 SDL_Texture* get_map_texture(SDL_Renderer *renderer, int seed);
 void move_bullets(struct node **bullets);

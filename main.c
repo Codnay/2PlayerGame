@@ -2,10 +2,10 @@
 #include <SDL.h>
 #include <SDL_ttf.h>
 #include <pthread.h>
+//#include <iostream>
 #include <time.h>
 #include <stdint.h>
 #include "objects.h"
-//#include "timer.h"
 #include "client_udp.h"
 #include "server_udp.h"
 #include "network.h"
@@ -19,7 +19,8 @@ int number_of_players = 0;
 int16_t my_id = -1;
 int16_t bullets_client[256];
 int check= 0;
-int powerup_pos_arr[MAX_POWERUP];
+int powerup_pos_arrx[MAX_POWERUP];
+int powerup_pos_arry[MAX_POWERUP];
 int bullets_number = 0;
 int powerup_number= 0;
 
@@ -178,7 +179,26 @@ int main(int argc, char** argv){
     powerup_pos.h= POWERUP_HEIGHT;
 
     SDL_Event e;
+
+    /*
+
     unsigned int last_time= 0;
+
+    */
+
+    srand(seed);
+
+    while(check<MAX_POWERUP){
+        int a= rand()%20;
+        int b= rand()%15;
+        if(check_empty(b,a)==1){
+            powerup_pos_arrx[check]= a*32+11;
+            powerup_pos_arry[check]= b*32+11;
+            check+=1;
+
+        }
+    }
+
     while (1) {
         if (SDL_PollEvent(&e)) {
             if (e.type == SDL_QUIT) {
@@ -214,15 +234,11 @@ int main(int argc, char** argv){
             SDL_RenderCopy(renderer, bullet, NULL, &bullet_pos);
         }
         
+        /*
         unsigned int current_time= SDL_GetTicks();
+
         
-
-            if((current_time- last_time)>POWERUP_SPAWNTIME){
-
-                last_time= current_time;
-                check =check+1;
-            }
-
+        
              if((current_time- last_time)>POWERUP_SPAWNTIME){
 
                 last_time= current_time;
@@ -230,26 +246,32 @@ int main(int argc, char** argv){
                 int a= (rand()%15)+1;
                 powerup_pos_arr[(check-1)%MAX_POWERUP]= a;
             }
+        */
+        /*
+             for(int i=0; i<MAX_POWERUP; i++){
+                int a= rand()%15;
+                int b= rand()%20;
+                // for(int j=0; j<15; j++ ){
+                //     for(int k=0; k<20; k++){
 
-             if (check>0){
-                 for(int i=0; i<check; i++){
-                    //int a= rand()%15;
-                    // for(int j=0; j<15; j++ ){
-                    //     for(int k=0; k<20; k++){
-
-                    //     }
-                    // }
-                    if(powerup_pos_arr[i]!=0){
-                        powerup_pos.x= 23+ powerup_pos_arr[i%MAX_POWERUP] *10;
-                        powerup_pos.y= 23+ powerup_pos_arr[i%MAX_POWERUP] *10;
-                        SDL_RenderCopy(renderer, powerup, NULL, &powerup_pos);
-                    }
-
-                    //else {break;}
-
+                //     }
+                // }
+                if(powerup_pos_arr[i]!=0){
+                    powerup_pos.x= 23+ powerup_pos_arr[i%MAX_POWERUP] *10;
+                    powerup_pos.y= 23+ powerup_pos_arr[i%MAX_POWERUP] *10;
+                    SDL_RenderCopy(renderer, powerup, NULL, &powerup_pos);
                 }
+
+                //else {break;}
             }
 
+        */
+
+        for(int i=0; i< MAX_POWERUP; i++){
+            powerup_pos.x= powerup_pos_arrx[i];
+            powerup_pos.y= powerup_pos_arry[i];
+            SDL_RenderCopy(renderer, powerup, NULL, &powerup_pos);
+        }
 
         SDL_RenderPresent(renderer);
     }
