@@ -71,10 +71,16 @@ void* server_receive_loop(void *arg) {
                 temp.position.w = BULLET_WIDTH;
                 temp.position.h = BULLET_HEIGHT;
                 temp.face = players_server[client_pos].face;
+
+                //------------------here 
                 if (temp.face == 1) {
                     temp.position.x += PLAYER_WIDTH;
-                } else {
+                } else if(temp.face == -1){
                     temp.position.x -= BULLET_WIDTH;
+                }else if(temp.face == 2){
+                    temp.position.y += PLAYER_HEIGHT;
+                }else{
+                    temp.position.y -= BULLET_HEIGHT;
                 }
                 temp.player_id = client_pos;
                 push_element(&bullets_server, &temp, sizeof(struct Bullet));
