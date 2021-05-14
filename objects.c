@@ -19,6 +19,9 @@ void resolve_player_key_down(int key, struct Player* player) {
     if (key == player->attack_key) {
         player->shoot = player->face;
     }
+    if (key == player-> powerA_key){
+        player->powerA= true;
+    }
 }
 
 void resolve_player_key_up(int key, struct Player* player) {
@@ -36,6 +39,9 @@ void resolve_player_key_up(int key, struct Player* player) {
     }
     if (key == player->attack_key) {
         player->shoot = false;
+    }
+    if (key == player-> powerA_key){
+        player->powerA= false;
     }
 }
 

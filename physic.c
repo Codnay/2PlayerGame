@@ -312,22 +312,66 @@ void move_player(struct Player *player) {
     int x_movement = 0;
     int y_movement = 0;
     if (player->left) {
-        x_movement -= PLAYER_SPEED;
-        player->face = -1;
+        if(player->powerupA_active){
+            x_movement -= POWER_PLAYER_SPEED;
+            player->face = -1;
+        }
+        else{
+            x_movement -= PLAYER_SPEED;
+            player->face = -1;
+        }
     }
     if (player->right) {
-        x_movement += PLAYER_SPEED;
-        player->face = 1;
+        if(player->powerupA_active){
+            x_movement += POWER_PLAYER_SPEED;
+            player->face = 1;
+        }
+        else{
+            x_movement += PLAYER_SPEED;
+            player->face = 1;
+        }
     }
     //-------------------------------------------------------
     if (player->up) {
-        y_movement -= PLAYER_SPEED;
-        player->face = -2;
+        if(player->powerupA_active){
+            y_movement -= POWER_PLAYER_SPEED;
+            player->face = -2;
+        }
+
+        else{
+            y_movement -= PLAYER_SPEED;
+            player->face = -2;
+        }
     }
     if (player->down) {
-        y_movement += PLAYER_SPEED;
-        player->face = 2;
+        if(player->powerupA_active){
+            y_movement += POWER_PLAYER_SPEED;
+            player->face = 2;
+        }
+
+        else{
+            y_movement += PLAYER_SPEED;
+            player->face = 2;
+        }
     }
+
+    if(player->powerA){
+
+
+        if(player->powerup_a>0){
+            player->powerupA_active= 1;
+            player->powerupA_time_elapsed+=1;
+        }
+
+        if(player->powerupA_time_elapsed>WAIT_FRAME){
+            player->powerup_a -=1;
+            player->powerupA_time_elapsed= 0;
+        }
+
+
+        //player.powerup_a-=1;
+    }
+
     //-------------------------------------------------------
     // if (player->up) {
     //     if (player->can_jump) {

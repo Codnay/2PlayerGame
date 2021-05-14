@@ -50,7 +50,9 @@ void init_players() {
         players[i].up_key = SDLK_UP;
         players[i].down_key = SDLK_DOWN;
         players[i].attack_key = SDLK_z;
+        players[i].powerA_key = SDLK_x;
         //players[i].powerup_a= 0;
+        players[i].powerupA_active= 0;
         players[i].face = 1;
         players[i].shoot = false;
         players[i].y_speed = 0;

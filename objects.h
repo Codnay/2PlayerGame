@@ -7,12 +7,15 @@
 struct Player {
     SDL_Rect position;
     SDL_Texture *texture;
-    int left, right, up, down;
+    int left, right, up, down, powerA;
     int powerup_pos_arrx[MAX_POWERUP];
     int powerup_pos_arry[MAX_POWERUP];
     int can_jump, y_speed;
     int face, shoot, reloading;
-    int left_key, right_key, up_key, down_key, attack_key, power_key;
+    int powerupA_active;
+    int powerupA_time_elapsed;
+    unsigned int powerupA_start_time;
+    int left_key, right_key, up_key, down_key, attack_key, powerA_key;
     int powerup_a;
     int kills, deaths;
 };

@@ -13,6 +13,7 @@
 #define PLAYER_WIDTH 16
 #define PLAYER_HEIGHT 16
 #define PLAYER_SPEED 4
+#define POWER_PLAYER_SPEED 6
 #define BULLET_HEIGHT 8
 #define BULLET_WIDTH 8
 #define MAX_PLAYERS 10
@@ -30,6 +31,9 @@
 #define UP_KEY 0x04
 #define DOWN_KEY 0x08
 #define ATTACK_KEY 0x10
+#define POWERA_KEY 0x20
+
+#define WAIT_FRAME 6
 #define POWERUP_WIDTH 8
 #define POWERUP_HEIGHT 8
 #define POWERUP_SPAWNTIME 3000
