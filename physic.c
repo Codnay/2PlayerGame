@@ -280,6 +280,31 @@ int check_if_player_dies(struct Player *player, struct node **bullets, int *kill
     return false;
 }
 
+int check_if_powerup_collect(struct Player *player, struct node **powerup) {
+    struct node *next = *powerup;
+    struct SDL_Rect b; 
+    struct SDL_Rect p = player->position;
+    int i = -1;
+    while (next != NULL) {
+        //printf("wow \n");
+        i++;
+        b = ((struct PowerUp*) next->data)->position;
+        //printf("wow %d\n", b.x);
+        //printf("wow %d\n", b.y);
+        if (p.x < (b.x + b.w) &&
+                (p.x + p.w) > b.x &&
+                p.y < (b.y + b.h) &&
+                (p.y + p.h) > b.y) {
+            //*killer = ((struct Bullet*) next->data)->player_id;
+            //erase_element(powerup, i);
+            return i;
+        }
+        //printf("wow %d\n", i);
+        next = next->next;
+    }
+    return -1;
+}
+
 
 
 void move_player(struct Player *player) {

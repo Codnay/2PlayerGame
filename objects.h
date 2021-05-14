@@ -2,14 +2,18 @@
 #define OBJECTS_H
 
 #include <SDL.h>
+#include "constans.h"
 
 struct Player {
     SDL_Rect position;
     SDL_Texture *texture;
     int left, right, up, down;
+    int powerup_pos_arrx[MAX_POWERUP];
+    int powerup_pos_arry[MAX_POWERUP];
     int can_jump, y_speed;
     int face, shoot, reloading;
     int left_key, right_key, up_key, down_key, attack_key, power_key;
+    int powerup_a;
     int kills, deaths;
 };
 
@@ -26,7 +30,7 @@ struct PowerUp {
 
 };
 
-
+struct Player players[MAX_PLAYERS];
 void resolve_player_key_up(int key, struct Player* player);
 void resolve_player_key_down(int key, struct Player* player);
 void resolve_keyboard(SDL_Event e, struct Player* player);

@@ -14,13 +14,10 @@
 #include "font.h"
 #include "menu.h"
 
-struct Player players[MAX_PLAYERS];
 int number_of_players = 0;
 int16_t my_id = -1;
 int16_t bullets_client[256];
 int check= 0;
-int powerup_pos_arrx[MAX_POWERUP];
-int powerup_pos_arry[MAX_POWERUP];
 int bullets_number = 0;
 int powerup_number= 0;
 
@@ -53,6 +50,7 @@ void init_players() {
         players[i].up_key = SDLK_UP;
         players[i].down_key = SDLK_DOWN;
         players[i].attack_key = SDLK_z;
+        players[i].powerup_a= 0;
         players[i].face = 1;
         players[i].shoot = false;
         players[i].y_speed = 0;
@@ -80,6 +78,8 @@ void check_if_its_new_player(int id){
 void* client_loop(void *arg) {
     int socket = *((int *) arg);
     int16_t tab[BUF_MAX];
+    //int tabx[MAX_POWERUP];
+    //int taby[MAX_POWERUP];
     int length;
     int id, bullets_in_array;
     while (1) {
@@ -94,10 +94,21 @@ void* client_loop(void *arg) {
             players[id].position.y = tab[2];
             players[id].kills = tab[3];
             players[id].deaths = tab[4];
+
+            // for(int i=0; i< MAX_POWERUP; i++){
+            //     players[0].powerup_pos_arrx[i]= tabx[i];
+            //     players[0].powerup_pos_arry[i]= taby[i];
+            // }
+            
+            //players[id].powerup_pos_arrx= tab[5];
+            //players[id].powerup_pos_arry= tab[6];
+
+
         }
         if (id == -2) {
             bullets_in_array = (length - sizeof(int16_t)) / (sizeof(int16_t) * 2);
             memcpy(bullets_client, tab + 1, sizeof(int16_t) * 2 * bullets_in_array);
+            //memcpy()
             bullets_number = bullets_in_array;
         }
         usleep(50);
@@ -119,9 +130,14 @@ int main(int argc, char** argv){
     SDL_Texture *powerup= NULL;
     SDL_Texture *mapper = NULL;
     TTF_Init();
+
+
     TTF_Font *font;
     font = TTF_OpenFont("resources/m5x7.ttf", 24);
     init_players();
+
+
+
     window = SDL_CreateWindow(
             "game",
             SDL_WINDOWPOS_UNDEFINED,
@@ -145,6 +161,32 @@ int main(int argc, char** argv){
         return 1;
     }
     mapper = get_map_texture(renderer, seed);
+
+    srand(seed);
+
+    while(check<MAX_POWERUP){
+        
+        int a= rand()%20;
+        int b= rand()%15;
+        //printf("This is the enter a: %d\n", a);
+        //printf("This is the enter b: %d\n", b);
+        if(check_empty(b,a)==1){
+            //printf("This is the exit a: %d\n", a);
+            for (int i = 0; i < MAX_PLAYERS; i++) {
+                //printf("This is the exit b: %d\n", a);
+                //printf("This is the exit b: %d\n", b);
+                players[i].powerup_pos_arrx[check]= a*32+11;
+                players[i].powerup_pos_arry[check]= b*32+11;
+                
+
+            }
+            printf("This is the exit a: %d\n", players[0].powerup_pos_arrx[check]);
+            printf("This is the exit b: %d\n", players[0].powerup_pos_arrx[check]);
+            check+=1;
+
+        }
+    }
+
     tex = load_texture(renderer, "resources/player.bmp");
     bullet = load_texture(renderer, "resources/bullet.bmp");
     powerup= load_texture(renderer, "resources/bullet.bmp");
@@ -186,20 +228,10 @@ int main(int argc, char** argv){
 
     */
 
-    srand(seed);
-
-    while(check<MAX_POWERUP){
-        int a= rand()%20;
-        int b= rand()%15;
-        if(check_empty(b,a)==1){
-            powerup_pos_arrx[check]= a*32+11;
-            powerup_pos_arry[check]= b*32+11;
-            check+=1;
-
-        }
-    }
 
     while (1) {
+
+        //printf("powerup_a: %d\n", players[0].powerup_a);
         if (SDL_PollEvent(&e)) {
             if (e.type == SDL_QUIT) {
                 break;
@@ -268,10 +300,16 @@ int main(int argc, char** argv){
         */
 
         for(int i=0; i< MAX_POWERUP; i++){
-            powerup_pos.x= powerup_pos_arrx[i];
-            powerup_pos.y= powerup_pos_arry[i];
-            SDL_RenderCopy(renderer, powerup, NULL, &powerup_pos);
+
+            if(players[0].powerup_pos_arrx[i]!=-1){
+                //printf("This is wakanda %d\n", powerup_pos_arrx[i]);
+                powerup_pos.x= players[0].powerup_pos_arrx[i];
+                powerup_pos.y= players[0].powerup_pos_arry[i];
+                SDL_RenderCopy(renderer, powerup, NULL, &powerup_pos);
+            }
         }
+
+        //printf("Power_a: %d\n", players[0].powerup_a);
 
         SDL_RenderPresent(renderer);
     }

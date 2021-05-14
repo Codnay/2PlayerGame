@@ -30,8 +30,8 @@
 #define UP_KEY 0x04
 #define DOWN_KEY 0x08
 #define ATTACK_KEY 0x10
-#define POWERUP_WIDTH 10
-#define POWERUP_HEIGHT 10
+#define POWERUP_WIDTH 8
+#define POWERUP_HEIGHT 8
 #define POWERUP_SPAWNTIME 3000
 #define MAX_POWERUP 5
 

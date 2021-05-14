@@ -10,7 +10,23 @@
 struct sockaddr_in clients_addresses[MAX_PLAYERS];
 struct Player players_server[MAX_PLAYERS];
 struct node *bullets_server = NULL;
+struct node *powerup_list= NULL;
 int number_of_connected_clients = 0;
+
+void init_powerups(){
+    for(int i=MAX_POWERUP-1; i>=0; i--){
+        struct PowerUp temp;
+
+        temp.position.x = players[0].powerup_pos_arrx[i];
+        temp.position.y = players[0].powerup_pos_arry[i];
+        //printf("wow %d\n", temp.position.x);
+        //printf("wow %d\n", temp.position.y);
+
+        temp.position.w = POWERUP_WIDTH;
+        temp.position.h = POWERUP_HEIGHT;
+        push_element(&powerup_list, &temp,sizeof(struct PowerUp));
+    }
+}
 
 void prepare_server(int *sock, struct sockaddr_in *server_sock) {
     memset(clients_addresses, 0, sizeof(struct sockaddr_in) * MAX_PLAYERS);
@@ -57,6 +73,7 @@ void* server_receive_loop(void *arg) {
     int client_pos = 0;
     struct sockaddr_in client_addr;
     int16_t tab[4];
+    init_powerups();
     init_players_tab();
     while (1) {
         client_addr = receive_data(socket, tab);
@@ -120,7 +137,10 @@ int get_bullet_array(struct node *list, int16_t **array) {
 
 void* server_send_loop(void *arg) {
     int socket = *((int *) arg);
-    int16_t tab[3];
+    int16_t tab[5];
+    //int 
+    //int tabx[MAX_POWERUP];
+    //int taby[MAX_POWERUP];
     struct timeval start, stop;
     double time_interval;
     int killer;
@@ -145,6 +165,19 @@ void* server_send_loop(void *arg) {
                 players_server[killer].kills++;
             }
         }
+
+        for (i = 0; i < number_of_connected_clients; i++) {
+//printf("This is the k value: %d\n",check_if_powerup_collect(&players_server[i], &powerup_list) );
+            if (check_if_powerup_collect(&players_server[i], &powerup_list)>-1){
+                printf("This is the i value: %d\n",check_if_powerup_collect(&players[i], &powerup_list) );
+                for(j=0; j<number_of_connected_clients; j++){
+                    players[0].powerup_pos_arrx[check_if_powerup_collect(&players_server[j], &powerup_list)]= -1;
+                }
+                players_server[i].powerup_a+=1;
+            }
+
+        }
+
         int16_t *bullet_array = NULL;
         int bullets_n = get_bullet_array(bullets_server, &bullet_array);
         for (i = 0; i < number_of_connected_clients; i++) {
@@ -154,6 +187,14 @@ void* server_send_loop(void *arg) {
                 tab[2] = players_server[j].position.y;
                 tab[3] = players_server[j].kills;
                 tab[4] = players_server[j].deaths;
+                // for(int i=0; i<MAX_POWERUP; i++){
+                //     tabx[i]= players[0].powerup_poss_arrx[i];
+                // }
+                // for(int i=0; i<MAX_POWERUP; i++){
+                //     taby[i]= players[0].powerup_poss_arrx[i];
+                // }
+                //tab[5] = players_server[j].powerup_pos_arrx;
+                //tab[6] = players_server[j].powerup_pos_arry;
                 send_data(socket, clients_addresses[i], tab, 5);
                 usleep(20);
             }
@@ -167,6 +208,7 @@ void* server_send_loop(void *arg) {
             time_interval = (double) (stop.tv_usec - start.tv_usec);
         }
         usleep(FRAME_TIME - time_interval);
+
     }
 }
 
