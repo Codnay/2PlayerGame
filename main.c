@@ -50,7 +50,7 @@ void init_players() {
         players[i].up_key = SDLK_UP;
         players[i].down_key = SDLK_DOWN;
         players[i].attack_key = SDLK_z;
-        players[i].powerup_a= 0;
+        //players[i].powerup_a= 0;
         players[i].face = 1;
         players[i].shoot = false;
         players[i].y_speed = 0;
@@ -58,6 +58,7 @@ void init_players() {
         players[i].reloading = false;
         players[i].kills = 0;
         players[i].deaths = 0;
+        players[i].powerup_a= 0;
     }
 }
 
@@ -94,6 +95,19 @@ void* client_loop(void *arg) {
             players[id].position.y = tab[2];
             players[id].kills = tab[3];
             players[id].deaths = tab[4];
+            players[id].powerup_a= tab[5];
+
+            for(int k= 0; k<MAX_POWERUP; k++){
+                int helper;
+                helper= (int)tab[k+6];
+                players[0].powerup_pos_arrx[k]= helper;
+            }
+
+            for(int k= 0; k<MAX_POWERUP; k++){
+                int helper;
+                helper=  (int)tab[k+6+MAX_POWERUP];
+                players[0].powerup_pos_arry[k]= helper;
+            }
 
             // for(int i=0; i< MAX_POWERUP; i++){
             //     players[0].powerup_pos_arrx[i]= tabx[i];
@@ -162,7 +176,7 @@ int main(int argc, char** argv){
     }
     mapper = get_map_texture(renderer, seed);
 
-    srand(seed);
+    //srand((unsigned int)time(NULL));
 
     while(check<MAX_POWERUP){
         
@@ -180,12 +194,14 @@ int main(int argc, char** argv){
                 
 
             }
-            printf("This is the exit a: %d\n", players[0].powerup_pos_arrx[check]);
-            printf("This is the exit b: %d\n", players[0].powerup_pos_arrx[check]);
+            //printf("This is the exit a: %d\n", players[0].powerup_pos_arrx[check]);
+            //printf("This is the exit b: %d\n", players[0].powerup_pos_arrx[check]);
             check+=1;
 
         }
     }
+
+    srand(seed);
 
     tex = load_texture(renderer, "resources/player.bmp");
     bullet = load_texture(renderer, "resources/bullet.bmp");
@@ -309,7 +325,12 @@ int main(int argc, char** argv){
             }
         }
 
-        //printf("Power_a: %d\n", players[0].powerup_a);
+        disp_text(renderer, "power", font, 520, 10);
+        for (i = 0; i <= number_of_players; i++) {
+            char powers[10] = {};
+            sprintf(powers, "%d", players[i].powerup_a);
+            disp_text(renderer, powers, font, 520, 30 + i * 20);
+        }
 
         SDL_RenderPresent(renderer);
     }

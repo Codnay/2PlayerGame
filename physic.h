@@ -14,7 +14,6 @@ struct cell{
 };
 int check_empty(int x_coor, int y_coor);
 int map[15][20];
-
 //int powerup_pos_arrx[MAX_POWERUP];
 //int powerup_pos_arry[MAX_POWERUP];
 void move_player(struct Player *player); 

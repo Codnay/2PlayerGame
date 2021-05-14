@@ -36,6 +36,7 @@ long numin=1;     //Number of cells in the maze.
 // const int xsize=15;
 // const int ysize=20;
 
+
 void initialize();
 void generate();
 // void savebmp(int xspecial, int yspecial);
