@@ -368,6 +368,10 @@ void move_player(struct Player *player) {
             player->powerupA_time_elapsed= 0;
         }
 
+        if(player->powerupA_time_elapsed== WAIT_FRAME-1){
+            player->powerupA_start_time= POWERUPA_APPLY_TIME;
+        }
+
 
         //player.powerup_a-=1;
     }

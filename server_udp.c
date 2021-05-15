@@ -137,7 +137,7 @@ int get_bullet_array(struct node *list, int16_t **array) {
 
 void* server_send_loop(void *arg) {
     int socket = *((int *) arg);
-    int16_t tab[6+2*MAX_POWERUP];
+    int16_t tab[8+2*MAX_POWERUP];
     //int 
     //int tabx[MAX_POWERUP];
     //int taby[MAX_POWERUP];
@@ -164,6 +164,15 @@ void* server_send_loop(void *arg) {
                 players_server[i].deaths++;
                 players_server[killer].kills++;
             }
+
+            if(players_server[i].powerupA_start_time>0){
+                players_server[i].powerupA_start_time-=1;
+                //printf("This is the time: %d\n", players_server[i].powerupA_start_time);
+            }
+
+            if(players_server[i].powerupA_start_time==0){
+                players_server[i].powerupA_active= 0;
+            }
         }
 
         for (i = 0; i < number_of_connected_clients; i++) {
@@ -183,6 +192,8 @@ void* server_send_loop(void *arg) {
 
         }
 
+
+
         int16_t *bullet_array = NULL;
         int bullets_n = get_bullet_array(bullets_server, &bullet_array);
         for (i = 0; i < number_of_connected_clients; i++) {
@@ -192,16 +203,18 @@ void* server_send_loop(void *arg) {
                 tab[2] = players_server[j].position.y;
                 tab[3] = players_server[j].kills;
                 tab[4] = players_server[j].deaths;
-                tab[5]= players_server[j].powerup_a;
+                tab[5] = players_server[j].powerup_a;
+                tab[6] = players_server[j].powerupA_start_time;
+                
 
                 for(int k=0; k<MAX_POWERUP; k++){
                     int16_t helping= (int16_t)players[0].powerup_pos_arrx[k];
-                    tab[k+6]= helping;
+                    tab[k+7]= helping;
                 }
 
                 for(int k=0; k<MAX_POWERUP; k++){
                     int16_t helping= (int16_t)players[0].powerup_pos_arry[k];
-                    tab[k+6+MAX_POWERUP]= helping;
+                    tab[k+7+MAX_POWERUP]= helping;
                 }
                 // for(int i=0; i<MAX_POWERUP; i++){
                 //     tabx[i]= players[0].powerup_poss_arrx[i];
@@ -211,7 +224,7 @@ void* server_send_loop(void *arg) {
                 // }
                 //tab[5] = players_server[j].powerup_pos_arrx;
                 //tab[6] = players_server[j].powerup_pos_arry;
-                send_data(socket, clients_addresses[i], tab, 6+ 2*MAX_POWERUP);
+                send_data(socket, clients_addresses[i], tab, 8+ 2*MAX_POWERUP);
                 usleep(20);
             }
             send_data(socket, clients_addresses[i], bullet_array, 1 + (bullets_n * 2));

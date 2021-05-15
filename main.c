@@ -98,16 +98,17 @@ void* client_loop(void *arg) {
             players[id].kills = tab[3];
             players[id].deaths = tab[4];
             players[id].powerup_a= tab[5];
+            players[id].powerupA_start_time= tab[6];
 
             for(int k= 0; k<MAX_POWERUP; k++){
                 int helper;
-                helper= (int)tab[k+6];
+                helper= (int)tab[k+7];
                 players[0].powerup_pos_arrx[k]= helper;
             }
 
             for(int k= 0; k<MAX_POWERUP; k++){
                 int helper;
-                helper=  (int)tab[k+6+MAX_POWERUP];
+                helper=  (int)tab[k+7+MAX_POWERUP];
                 players[0].powerup_pos_arry[k]= helper;
             }
 
@@ -240,11 +241,11 @@ int main(int argc, char** argv){
 
     SDL_Event e;
 
-    /*
+    
 
-    unsigned int last_time= 0;
+    unsigned int last_time, current_time;
 
-    */
+    
 
 
     while (1) {
@@ -256,6 +257,18 @@ int main(int argc, char** argv){
             }
             resolve_keyboard(e, &players[my_id]);
         }
+        current_time= SDL_GetTicks();
+        //printf("This is the time stored: %d\n", players[my_id].powerupA_start_time);
+        //if(current_time- players[my_id].powerupA_start_time>3000){
+
+        //    players[my_id].powerupA_active= 0;
+        //     players[my_id].powerupA_start_time= current_time;
+        // }
+
+        //printf("This is the time: %d\n", players[my_id].powerupA_start_time);
+        //printf("This is the power value: %d\n", players[my_id].powerup_a);
+
+
         send_to_server(sock_client, server_addr, my_id, key_state_from_player(&players[my_id]));
         usleep(30);
         SDL_RenderClear(renderer);
