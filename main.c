@@ -13,6 +13,7 @@
 #include "constans.h"
 #include "font.h"
 #include "menu.h"
+#include <sound.h>
 
 int number_of_players = 0;
 int16_t my_id = -1;
@@ -209,6 +210,10 @@ int main(int argc, char** argv){
     tex = load_texture(renderer, "resources/player.bmp");
     bullet = load_texture(renderer, "resources/bullet.bmp");
     powerup= load_texture(renderer, "resources/bullet.bmp");
+
+    init();
+    loadMedia();
+
     int i;
     server_or_client(renderer, &menu, font);
     if (menu == 'c') {
@@ -256,6 +261,7 @@ int main(int argc, char** argv){
                 break;
             }
             resolve_keyboard(e, &players[my_id]);
+            start(e);
         }
         current_time= SDL_GetTicks();
         //printf("This is the time stored: %d\n", players[my_id].powerupA_start_time);
@@ -299,11 +305,9 @@ int main(int argc, char** argv){
         
         /*
         unsigned int current_time= SDL_GetTicks();
-
         
         
              if((current_time- last_time)>POWERUP_SPAWNTIME){
-
                 last_time= current_time;
                 check =check+1;
                 int a= (rand()%15)+1;
@@ -316,7 +320,6 @@ int main(int argc, char** argv){
                 int b= rand()%20;
                 // for(int j=0; j<15; j++ ){
                 //     for(int k=0; k<20; k++){
-
                 //     }
                 // }
                 if(powerup_pos_arr[i]!=0){
@@ -324,10 +327,8 @@ int main(int argc, char** argv){
                     powerup_pos.y= 23+ powerup_pos_arr[i%MAX_POWERUP] *10;
                     SDL_RenderCopy(renderer, powerup, NULL, &powerup_pos);
                 }
-
                 //else {break;}
             }
-
         */
 
         for(int i=0; i< MAX_POWERUP; i++){
@@ -355,6 +356,7 @@ int main(int argc, char** argv){
     pthread_cancel(thread_id_client);
     pthread_cancel(thread_id_server);
     pthread_cancel(thread_id_server_send);
+    close_sound();
     SDL_DestroyTexture(tex);
     SDL_DestroyTexture(bullet);
     SDL_DestroyTexture(mapper);
