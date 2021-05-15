@@ -65,7 +65,7 @@ void how_to_play(SDL_Renderer *renderer, char *menu, TTF_Font *font){
         disp_text(renderer, "the opponent to respawn from the starting.", font, 150, 300);
         disp_text(renderer, "There are some POWERUPS in the path which can increase the player's speed", font, 10, 350);
         disp_text(renderer, "or freeze the opponent for a short while.", font, 150, 400);
-        disp_text(renderer, "[r]eturn", font, 280, 400);
+        disp_text(renderer, "[r]eturn", font, 280, 450);
         SDL_RenderPresent(renderer);
     }
 }
