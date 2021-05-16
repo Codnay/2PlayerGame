@@ -1,7 +1,7 @@
 #include "physic.h"
 #include "constans.h"
 //------------
-
+#include <SDL_image.h>
 #include <stdio.h>
 #include <stdlib.h>
 #include <time.h>
@@ -438,9 +438,11 @@ SDL_Texture* get_map_texture(SDL_Renderer *renderer, int seed) {
     SDL_Rect rect;
     rect.w = TILE_SIZE;
     rect.h = TILE_SIZE;
-    bitmap = SDL_LoadBMP("resources/tile.bmp");
+
+    bitmap = SDL_LoadBMP("resources/skull.bmp");
     SDL_Texture *tex = NULL;
     tex = SDL_CreateTextureFromSurface(renderer, bitmap);
+    SDL_FreeSurface(bitmap);
     map_texture = SDL_CreateTexture(renderer,SDL_PIXELFORMAT_RGBA8888, SDL_TEXTUREACCESS_TARGET, SCREEN_WIDTH, SCREEN_HEIGHT);
     SDL_SetRenderTarget(renderer, map_texture);
 
