@@ -13,5 +13,6 @@ Mix_Chunk *gCar;
 
 int init();
 int loadMedia();
+int loadMedia2();
 void close_sound();
 void start(SDL_Event e);
