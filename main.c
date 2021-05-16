@@ -53,7 +53,7 @@ void init_players() {
         players[i].attack_key = SDLK_z;
         players[i].powerA_key = SDLK_x;
         //players[i].powerup_a= 0;
-        players[i].powerupA_active= 0;
+        //players[i].powerupA_active= 0;
         players[i].face = 1;
         players[i].shoot = false;
         players[i].y_speed = 0;
@@ -100,16 +100,19 @@ void* client_loop(void *arg) {
             players[id].deaths = tab[4];
             players[id].powerup_a= tab[5];
             players[id].powerupA_start_time= tab[6];
+            players[id].powerup_b= tab[7];
+            players[id].powerupB_start_time= tab[8];
+
 
             for(int k= 0; k<MAX_POWERUP; k++){
                 int helper;
-                helper= (int)tab[k+7];
+                helper= (int)tab[k+9];
                 players[0].powerup_pos_arrx[k]= helper;
             }
 
             for(int k= 0; k<MAX_POWERUP; k++){
                 int helper;
-                helper=  (int)tab[k+7+MAX_POWERUP];
+                helper=  (int)tab[k+9+MAX_POWERUP];
                 players[0].powerup_pos_arry[k]= helper;
             }
 
@@ -257,7 +260,7 @@ int main(int argc, char** argv){
 
     
 
-    unsigned int last_time, current_time;
+    //unsigned int last_time, current_time;
 
     
 
@@ -272,7 +275,7 @@ int main(int argc, char** argv){
             resolve_keyboard(e, &players[my_id]);
             start(e);
         }
-        current_time= SDL_GetTicks();
+        //current_time= SDL_GetTicks();
         //printf("This is the time stored: %d\n", players[my_id].powerupA_start_time);
         //if(current_time- players[my_id].powerupA_start_time>3000){
 

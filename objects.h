@@ -12,11 +12,19 @@ struct Player {
     int powerup_pos_arry[MAX_POWERUP];
     int can_jump, y_speed;
     int face, shoot, reloading;
-    int powerupA_active;
-    int powerupA_time_elapsed;
+    //int powerupA_active;
+    //int powerupB_active;
+
+    //int powerupA_time_elapsed;
+    //int powerupB_time_elapsed;
+
     unsigned int powerupA_start_time;
+    unsigned int powerupB_start_time;
+    //unsigned int 
+
     int left_key, right_key, up_key, down_key, attack_key, powerA_key;
     int powerup_a;
+    int powerup_b;
     int kills, deaths;
 };
 
@@ -28,7 +36,7 @@ struct Bullet {
 
 struct PowerUp {
     SDL_Rect position;
-    int taken;
+    int powerup_type;
     int player_id;  
 
 };

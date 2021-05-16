@@ -71,12 +71,12 @@ struct Bullet init_bullet(int x, int y, int face) {
     return b;
 }
 
-struct PowerUp init_powerup(int x, int y, int taken){
+struct PowerUp init_powerup(int x, int y, int powerup_type){
     struct PowerUp p;
     p.position.x= x;
     p.position.y= y;
     p.position.w= POWERUP_HEIGHT;
     p.position.h= POWERUP_WIDTH;
-    p.taken= taken;
+    p.powerup_type= powerup_type;
     return p;
 }

@@ -24,6 +24,15 @@ void init_powerups(){
 
         temp.position.w = POWERUP_WIDTH;
         temp.position.h = POWERUP_HEIGHT;
+
+        if(i%2==0){
+            temp.powerup_type= 0;
+        }
+
+        else{
+            temp.powerup_type=1;
+        }
+
         push_element(&powerup_list, &temp,sizeof(struct PowerUp));
     }
 }
@@ -137,7 +146,7 @@ int get_bullet_array(struct node *list, int16_t **array) {
 
 void* server_send_loop(void *arg) {
     int socket = *((int *) arg);
-    int16_t tab[8+2*MAX_POWERUP];
+    int16_t tab[11+2*MAX_POWERUP];
     //int 
     //int tabx[MAX_POWERUP];
     //int taby[MAX_POWERUP];
@@ -170,8 +179,16 @@ void* server_send_loop(void *arg) {
                 //printf("This is the time: %d\n", players_server[i].powerupA_start_time);
             }
 
+            if(players_server[i].powerupB_start_time>0){
+                players_server[i].powerupB_start_time-=1;
+            }
+
+            if(players_server[i].powerupB_start_time==0){
+                players_server[i].powerup_b= 0;
+            }
+
             if(players_server[i].powerupA_start_time==0){
-                players_server[i].powerupA_active= 0;
+                players_server[i].powerup_a= 0;
             }
         }
 
@@ -182,7 +199,16 @@ void* server_send_loop(void *arg) {
                 //for(j=0; j<number_of_connected_clients; j++){
 
                 if(players[0].powerup_pos_arrx[check_if_powerup_collect(&players_server[i], &powerup_list)]!= -1){
-                    players_server[i].powerup_a++;
+                    //players_server[i].powerup_a++;
+                    if(check_if_powerup_collect(&players_server[i], &powerup_list)%2==0){
+                        players_server[i].powerup_a= 1;
+                        players_server[i].powerupA_start_time= POWERUPA_APPLY_TIME;
+                    }
+
+                    else{
+                        players_server[1-i].powerup_b= 1;
+                        players_server[1-i].powerupB_start_time= POWERUPB_APPLY_TIME;
+                    }
                 }
 
                 players[0].powerup_pos_arrx[check_if_powerup_collect(&players_server[i], &powerup_list)]= -1;
@@ -205,16 +231,18 @@ void* server_send_loop(void *arg) {
                 tab[4] = players_server[j].deaths;
                 tab[5] = players_server[j].powerup_a;
                 tab[6] = players_server[j].powerupA_start_time;
+                tab[7] = players_server[j].powerup_b;
+                tab[8] = players_server[j].powerupB_start_time;
                 
 
                 for(int k=0; k<MAX_POWERUP; k++){
                     int16_t helping= (int16_t)players[0].powerup_pos_arrx[k];
-                    tab[k+7]= helping;
+                    tab[k+9]= helping;
                 }
 
                 for(int k=0; k<MAX_POWERUP; k++){
                     int16_t helping= (int16_t)players[0].powerup_pos_arry[k];
-                    tab[k+7+MAX_POWERUP]= helping;
+                    tab[k+9+MAX_POWERUP]= helping;
                 }
                 // for(int i=0; i<MAX_POWERUP; i++){
                 //     tabx[i]= players[0].powerup_poss_arrx[i];
@@ -224,7 +252,7 @@ void* server_send_loop(void *arg) {
                 // }
                 //tab[5] = players_server[j].powerup_pos_arrx;
                 //tab[6] = players_server[j].powerup_pos_arry;
-                send_data(socket, clients_addresses[i], tab, 8+ 2*MAX_POWERUP);
+                send_data(socket, clients_addresses[i], tab, 11+ 2*MAX_POWERUP);
                 usleep(20);
             }
             send_data(socket, clients_addresses[i], bullet_array, 1 + (bullets_n * 2));

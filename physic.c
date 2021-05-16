@@ -300,7 +300,7 @@ int check_if_powerup_collect(struct Player *player, struct node **powerup) {
             //erase_element(powerup, i);
             return i;
         }
-        //printf("wow %d\n", i);
+        
         next = next->next;
     }
     return -1;
@@ -312,18 +312,29 @@ void move_player(struct Player *player) {
     int x_movement = 0;
     int y_movement = 0;
     if (player->left) {
-        if(player->powerupA_active){
+        if(player->powerup_a){
             x_movement -= POWER_PLAYER_SPEED;
             player->face = -1;
         }
+
+        else if(player->powerup_b){
+            x_movement -= SLOW_PLAYER_SPEED;
+            player->face = -1;
+        }
+
         else{
             x_movement -= PLAYER_SPEED;
             player->face = -1;
         }
     }
     if (player->right) {
-        if(player->powerupA_active){
+        if(player->powerup_a){
             x_movement += POWER_PLAYER_SPEED;
+            player->face = 1;
+        }
+
+        else if(player->powerup_b){
+            x_movement += SLOW_PLAYER_SPEED;
             player->face = 1;
         }
         else{
@@ -333,8 +344,13 @@ void move_player(struct Player *player) {
     }
     //-------------------------------------------------------
     if (player->up) {
-        if(player->powerupA_active){
+        if(player->powerup_a){
             y_movement -= POWER_PLAYER_SPEED;
+            player->face = -2;
+        }
+
+        else if(player->powerup_b){
+            y_movement -= SLOW_PLAYER_SPEED;
             player->face = -2;
         }
 
@@ -344,8 +360,12 @@ void move_player(struct Player *player) {
         }
     }
     if (player->down) {
-        if(player->powerupA_active){
+        if(player->powerup_a){
             y_movement += POWER_PLAYER_SPEED;
+            player->face = 2;
+        }
+        if(player->powerup_b){
+            y_movement += SLOW_PLAYER_SPEED;
             player->face = 2;
         }
 
@@ -355,26 +375,26 @@ void move_player(struct Player *player) {
         }
     }
 
-    if(player->powerA){
+    // if(player->powerA){
 
 
-        if(player->powerup_a>0){
-            player->powerupA_active= 1;
-            player->powerupA_time_elapsed+=1;
-        }
+    //     if(player->powerup_a>0){
+    //         player->powerupA_active= 1;
+    //         player->powerupA_time_elapsed+=1;
+    //     }
 
-        if(player->powerupA_time_elapsed>WAIT_FRAME){
-            player->powerup_a -=1;
-            player->powerupA_time_elapsed= 0;
-        }
+    //     if(player->powerupA_time_elapsed>WAIT_FRAME){
+    //         player->powerup_a -=1;
+    //         player->powerupA_time_elapsed= 0;
+    //     }
 
-        if(player->powerupA_time_elapsed== WAIT_FRAME-1){
-            player->powerupA_start_time= POWERUPA_APPLY_TIME;
-        }
+    //     if(player->powerupA_time_elapsed== WAIT_FRAME-1){
+    //         player->powerupA_start_time= POWERUPA_APPLY_TIME;
+    //     }
 
 
-        //player.powerup_a-=1;
-    }
+    //     //player.powerup_a-=1;
+    // }
 
     //-------------------------------------------------------
     // if (player->up) {
