@@ -157,7 +157,7 @@ int main(int argc, char** argv){
 
 
     window = SDL_CreateWindow(
-            "game",
+            "DeathRace",
             SDL_WINDOWPOS_UNDEFINED,
             SDL_WINDOWPOS_UNDEFINED,
             640,
@@ -216,6 +216,15 @@ int main(int argc, char** argv){
 
     int i;
     server_or_client(renderer, &menu, font);
+    while(menu != 's' && menu != 'c'){
+        if (menu == 'h') {
+            // server_ip_addr = malloc(16 * sizeof(char));
+            how_to_play(renderer, &menu, font);
+        }else if(menu == 'r'){
+            server_or_client(renderer, &menu, font);
+        }
+    }
+    
     if (menu == 'c') {
         server_ip_addr = malloc(16 * sizeof(char));
         ask_for_ip(renderer, font, server_ip_addr);
@@ -283,18 +292,18 @@ int main(int argc, char** argv){
             SDL_RenderCopy(renderer, tex, NULL, &players[i].position);
         }
 
-        disp_text(renderer, "kills", font, 400, 10);
+        // disp_text(renderer, "kills", font, 400, 10);
         for (i = 0; i <= number_of_players; i++) {
             char kills[10] = {};
             sprintf(kills, "%d", players[i].kills);
-            disp_text(renderer, kills, font, 400, 30 + i * 20);
+            // disp_text(renderer, kills, font, 400, 30 + i * 20);
         }
 
-        disp_text(renderer, "deaths", font, 460, 10);
+        // disp_text(renderer, "deaths", font, 460, 10);
         for (i = 0; i <= number_of_players; i++) {
             char deaths[10] = {};
             sprintf(deaths, "%d", players[i].deaths);
-            disp_text(renderer, deaths, font, 460, 30 + i * 20);
+            // disp_text(renderer, deaths, font, 460, 30 + i * 20);
         }
 
         for (i = 0; i < bullets_number; i++) {
@@ -357,9 +366,11 @@ int main(int argc, char** argv){
     pthread_cancel(thread_id_server);
     pthread_cancel(thread_id_server_send);
     close_sound();
+    
     SDL_DestroyTexture(tex);
     SDL_DestroyTexture(bullet);
     SDL_DestroyTexture(mapper);
+    SDL_DestroyTexture(background_texture);
     SDL_DestroyRenderer(renderer);
     SDL_DestroyWindow(window);
     SDL_Quit();
