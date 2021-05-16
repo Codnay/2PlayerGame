@@ -1,6 +1,8 @@
 #include <stdio.h>
 #include <SDL.h>
 #include <SDL_ttf.h>
+#include<SDL2/SDL_mixer.h>
+#include <SDL_image.h>
 #include <pthread.h>
 //#include <iostream>
 #include <time.h>
@@ -150,12 +152,16 @@ int main(int argc, char** argv){
     SDL_Texture *tex = NULL;
     SDL_Texture *bullet = NULL;
     SDL_Texture *powerup= NULL;
+    SDL_Texture *powerA= NULL;
+    SDL_Texture *powerB= NULL;
+    SDL_Texture *flag_server= NULL;
+    SDL_Texture *flag_client= NULL;
     SDL_Texture *mapper = NULL;
     TTF_Init();
 
 
     TTF_Font *font;
-    font = TTF_OpenFont("resources/m5x7.ttf", 24);
+    font = TTF_OpenFont("resources/m5x7.ttf", 48);
     init_players();
 
 
@@ -164,14 +170,16 @@ int main(int argc, char** argv){
             "DeathRace",
             SDL_WINDOWPOS_UNDEFINED,
             SDL_WINDOWPOS_UNDEFINED,
-            640,
-            480,
+            1280,
+            960,
             0);
 
     if (window == NULL) {
         printf("Could not create window: %s\n", SDL_GetError());
         return 1;
     }
+
+    int imgFlags = IMG_INIT_PNG;
 
     renderer = SDL_CreateRenderer(window, -1,
             SDL_RENDERER_ACCELERATED | SDL_RENDERER_PRESENTVSYNC);
@@ -197,8 +205,8 @@ int main(int argc, char** argv){
             for (int i = 0; i < MAX_PLAYERS; i++) {
                 //printf("This is the exit b: %d\n", a);
                 //printf("This is the exit b: %d\n", b);
-                players[i].powerup_pos_arrx[check]= a*32+11;
-                players[i].powerup_pos_arry[check]= b*32+11;
+                players[i].powerup_pos_arrx[check]= a*64+22;
+                players[i].powerup_pos_arry[check]= b*64+22;
                 
 
             }
@@ -209,10 +217,10 @@ int main(int argc, char** argv){
         }
     }
     for (int i = 0; i < MAX_PLAYERS; i++) {
-        players[i].powerup_pos_arrx[MAX_POWERUP-2]= SPAWN_X;
-        players[i].powerup_pos_arry[MAX_POWERUP-2]= SPAWN_Y;
-        players[i].powerup_pos_arrx[MAX_POWERUP-1]= SPAWN_A;
-        players[i].powerup_pos_arry[MAX_POWERUP-1]= SPAWN_B;
+        players[i].powerup_pos_arrx[MAX_POWERUP-2]= SPAWN_X+22;
+        players[i].powerup_pos_arry[MAX_POWERUP-2]= SPAWN_Y+22;
+        players[i].powerup_pos_arrx[MAX_POWERUP-1]= SPAWN_A+22;
+        players[i].powerup_pos_arry[MAX_POWERUP-1]= SPAWN_B+22;
     }
 
 
@@ -222,6 +230,21 @@ int main(int argc, char** argv){
     tex = load_texture(renderer, "resources/player.bmp");
     bullet = load_texture(renderer, "resources/bullet.bmp");
     powerup= load_texture(renderer, "resources/bullet.bmp");
+    // powerA= load_texture(renderer, "resources/powerA.bmp");
+    flag_server= load_texture(renderer, "resources/server.bmp");
+    // flag_client= load_texture(renderer, "resources/client.bmp");
+    SDL_Surface *FLGCLNT = IMG_Load("resources/client.png");
+    flag_client = SDL_CreateTextureFromSurface(renderer, FLGCLNT);
+    SDL_FreeSurface(FLGCLNT);
+
+    SDL_Surface *POWERA = IMG_Load("resources/powerA.png");
+    powerA = SDL_CreateTextureFromSurface(renderer, POWERA);
+    SDL_FreeSurface(POWERA);
+
+    SDL_Surface *POWERB = IMG_Load("resources/powerB.png");
+    powerB = SDL_CreateTextureFromSurface(renderer, POWERB);
+    SDL_FreeSurface(POWERB);
+
 
     init();
     loadMedia();
@@ -272,7 +295,7 @@ int main(int argc, char** argv){
     //unsigned int last_time, current_time;
 
     
-
+    int who_won;
 
     while (1) {
 
@@ -297,14 +320,18 @@ int main(int argc, char** argv){
         //printf("This is the power value: %d\n", players[my_id].powerup_a);
         if(players[0].win== 1){
             //THE CLIENT WON
-            printf("Player CLIENT won \n");
+            who_won = 1;
+            break;
+            // printf("Player CLIENT won \n");
 
 
         }
 
         if(players[0].win==2){
             //THE SERVER WON
-            printf("Player SERVER won \n");
+            who_won = 0;
+            break;
+            // printf("Player SERVER won \n");
         }
 
         send_to_server(sock_client, server_addr, my_id, key_state_from_player(&players[my_id]));
@@ -372,38 +399,63 @@ int main(int argc, char** argv){
 
                 if(i== MAX_POWERUP-2){
                     //SERVER WALA 
-                    SDL_RenderCopy(renderer, powerup, NULL, &powerup_pos);
+                    SDL_RenderCopy(renderer, flag_server, NULL, &powerup_pos);
                 }
 
                 else if(i== MAX_POWERUP-1){
                     //CLIENT
-                    SDL_RenderCopy(renderer, powerup, NULL, &powerup_pos);
+                    SDL_RenderCopy(renderer, flag_client, NULL, &powerup_pos);
                 }
 
                 else if(i%2==0){
                     //SPEEDUP
-                    SDL_RenderCopy(renderer, powerup, NULL, &powerup_pos);
+                    SDL_RenderCopy(renderer, powerA, NULL, &powerup_pos);
                 }
 
                 else{
                     //SPEEDDOWN
-                    SDL_RenderCopy(renderer, powerup, NULL, &powerup_pos);
+                    SDL_RenderCopy(renderer, powerB, NULL, &powerup_pos);
                 }
 
 
             }
         }
 
-        disp_text(renderer, "power", font, 520, 10);
+        // disp_text(renderer, "power", font, 520, 10);
         for (i = 0; i <= number_of_players; i++) {
             char powers[10] = {};
             sprintf(powers, "%d", players[i].powerup_a);
-            disp_text(renderer, powers, font, 520, 30 + i * 20);
+            // disp_text(renderer, powers, font, 520, 30 + i * 20);
         }
 
         SDL_RenderPresent(renderer);
     }
 
+    Mix_HaltMusic();
+    loadMedia2();
+    while(1){
+        if (who_won)
+        {
+            SDL_RenderClear(renderer);
+            SDL_Surface *finish_bg = SDL_LoadBMP("resources/end.bmp");
+            SDL_Texture *finish_texture = SDL_CreateTextureFromSurface(renderer, finish_bg);
+            SDL_FreeSurface(finish_bg);
+            SDL_RenderCopy(renderer,finish_texture, NULL, NULL);
+            title = TTF_OpenFont("resources/m5x7.ttf", 92);
+            disp_text(renderer, "Player CLIENT WON!", title, 375, 400);
+            SDL_RenderPresent(renderer);
+        }else{
+            SDL_RenderClear(renderer);
+            SDL_Surface *finish_bg = SDL_LoadBMP("resources/end.bmp");
+            SDL_Texture *finish_texture = SDL_CreateTextureFromSurface(renderer, finish_bg);
+            SDL_FreeSurface(finish_bg);
+            SDL_RenderCopy(renderer,finish_texture, NULL, NULL);
+            title = TTF_OpenFont("resources/m5x7.ttf", 92);
+            disp_text(renderer, "Player SERVER WON!", title, 375, 400);
+            SDL_RenderPresent(renderer);
+        }
+    }
+    
     close(sock_client);
     close(sock_server);
     pthread_cancel(thread_id_client);
