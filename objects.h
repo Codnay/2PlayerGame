@@ -25,6 +25,7 @@ struct Player {
     int left_key, right_key, up_key, down_key, attack_key, powerA_key;
     int powerup_a;
     int powerup_b;
+    int win;
     int kills, deaths;
 };
 
