@@ -102,17 +102,18 @@ void* client_loop(void *arg) {
             players[id].powerupA_start_time= tab[6];
             players[id].powerup_b= tab[7];
             players[id].powerupB_start_time= tab[8];
+            players[0].win= tab[9];
 
 
             for(int k= 0; k<MAX_POWERUP; k++){
                 int helper;
-                helper= (int)tab[k+9];
+                helper= (int)tab[k+10];
                 players[0].powerup_pos_arrx[k]= helper;
             }
 
             for(int k= 0; k<MAX_POWERUP; k++){
                 int helper;
-                helper=  (int)tab[k+9+MAX_POWERUP];
+                helper=  (int)tab[k+10+MAX_POWERUP];
                 players[0].powerup_pos_arry[k]= helper;
             }
 
@@ -185,7 +186,7 @@ int main(int argc, char** argv){
 
     //srand((unsigned int)time(NULL));
 
-    while(check<MAX_POWERUP){
+    while(check<MAX_POWERUP-2){
         
         int a= rand()%20;
         int b= rand()%15;
@@ -207,6 +208,14 @@ int main(int argc, char** argv){
 
         }
     }
+    for (int i = 0; i < MAX_PLAYERS; i++) {
+        players[i].powerup_pos_arrx[MAX_POWERUP-2]= SPAWN_X;
+        players[i].powerup_pos_arry[MAX_POWERUP-2]= SPAWN_Y;
+        players[i].powerup_pos_arrx[MAX_POWERUP-1]= SPAWN_A;
+        players[i].powerup_pos_arry[MAX_POWERUP-1]= SPAWN_B;
+    }
+
+
 
     srand(seed);
 
@@ -275,6 +284,7 @@ int main(int argc, char** argv){
             resolve_keyboard(e, &players[my_id]);
             start(e);
         }
+
         //current_time= SDL_GetTicks();
         //printf("This is the time stored: %d\n", players[my_id].powerupA_start_time);
         //if(current_time- players[my_id].powerupA_start_time>3000){
@@ -285,7 +295,17 @@ int main(int argc, char** argv){
 
         //printf("This is the time: %d\n", players[my_id].powerupA_start_time);
         //printf("This is the power value: %d\n", players[my_id].powerup_a);
+        if(players[0].win== 1){
+            //THE CLIENT WON
+            printf("Player CLIENT won \n");
 
+
+        }
+
+        if(players[0].win==2){
+            //THE SERVER WON
+            printf("Player SERVER won \n");
+        }
 
         send_to_server(sock_client, server_addr, my_id, key_state_from_player(&players[my_id]));
         usleep(30);
@@ -349,7 +369,28 @@ int main(int argc, char** argv){
                 //printf("This is wakanda %d\n", powerup_pos_arrx[i]);
                 powerup_pos.x= players[0].powerup_pos_arrx[i];
                 powerup_pos.y= players[0].powerup_pos_arry[i];
-                SDL_RenderCopy(renderer, powerup, NULL, &powerup_pos);
+
+                if(i== MAX_POWERUP-2){
+                    //SERVER WALA 
+                    SDL_RenderCopy(renderer, powerup, NULL, &powerup_pos);
+                }
+
+                else if(i== MAX_POWERUP-1){
+                    //CLIENT
+                    SDL_RenderCopy(renderer, powerup, NULL, &powerup_pos);
+                }
+
+                else if(i%2==0){
+                    //SPEEDUP
+                    SDL_RenderCopy(renderer, powerup, NULL, &powerup_pos);
+                }
+
+                else{
+                    //SPEEDDOWN
+                    SDL_RenderCopy(renderer, powerup, NULL, &powerup_pos);
+                }
+
+
             }
         }
 
