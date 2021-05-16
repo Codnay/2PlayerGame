@@ -53,26 +53,32 @@ int loadMedia()
 		success = 0;
 	}
 	
-	// gHigh = Mix_LoadWAV( "21_sound_effects_and_music/high.wav" );
-	// if( gHigh == NULL )
-	// {
-	// 	printf( "Failed to load high sound effect! SDL_mixer Error: %s\n", Mix_GetError() );
-	// 	success = 0;
-	// }
 
-	// gMedium = Mix_LoadWAV( "21_sound_effects_and_music/medium.wav" );
-	// if( gMedium == NULL )
-	// {
-	// 	printf( "Failed to load medium sound effect! SDL_mixer Error: %s\n", Mix_GetError() );
-	// 	success = 0;
-	// }
+	Mix_PlayMusic( gMusic, -1 );
 
-	// gLow = Mix_LoadWAV( "21_sound_effects_and_music/low.wav" );
-	// if( gLow == NULL )
-	// {
-	// 	printf( "Failed to load low sound effect! SDL_mixer Error: %s\n", Mix_GetError() );
-	// 	success = 0;
-	// }
+	return success;
+}
+int loadMedia2()
+{
+	//Loading success flag
+	int success = 1;
+
+	//Load music
+	gMusic = Mix_LoadMUS( "resources/finish.wav" );
+	if( gMusic == NULL )
+	{
+		printf( "Failed to load beat music! SDL_mixer Error: %s\n", Mix_GetError() );
+		success = 0;
+	}
+	
+	//Load sound effects
+	gCar = Mix_LoadWAV( "resources/car2.wav" );
+	if( gCar == NULL )
+	{
+		printf( "Failed to load scratch sound effect! SDL_mixer Error: %s\n", Mix_GetError() );
+		success = 0;
+	}
+	
 
 	Mix_PlayMusic( gMusic, -1 );
 
