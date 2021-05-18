@@ -260,14 +260,15 @@ int main(int argc, char** argv){
     tex2_down = load_texture(renderer, "resources/player2_down.bmp");
     tex2_right = load_texture(renderer, "resources/player2_right.bmp");
     tex2_left = load_texture(renderer, "resources/player2_left.bmp");
-    bullet = load_texture(renderer, "resources/bullet.bmp");
+    bullet = load_texture(renderer, "resources/canon.bmp");
     // powerup= load_texture(renderer, "resources/bullet.bmp");
     // powerA= load_texture(renderer, "resources/powerA.bmp");
-    flag_server= load_texture(renderer, "resources/server.bmp");
+    flag_server= load_texture(renderer, "resources/flag.bmp");
+    flag_client= load_texture(renderer, "resources/flag.bmp");
     // flag_client= load_texture(renderer, "resources/client.bmp");
-    SDL_Surface *FLGCLNT = IMG_Load("resources/client.png");
-    flag_client = SDL_CreateTextureFromSurface(renderer, FLGCLNT);
-    SDL_FreeSurface(FLGCLNT);
+    // SDL_Surface *FLGCLNT = IMG_Load("resources/client.png");
+    // flag_client = SDL_CreateTextureFromSurface(renderer, FLGCLNT);
+    // SDL_FreeSurface(FLGCLNT);
 
     SDL_Surface *POWERA = IMG_Load("resources/powerA.png");
     powerA = SDL_CreateTextureFromSurface(renderer, POWERA);
@@ -560,7 +561,7 @@ int main(int argc, char** argv){
         
         SDL_RenderCopy(renderer,finish_texture, NULL, NULL);
         
-        disp_text(renderer, "Player CLIENT WON!", title, 200, 310);
+        disp_text(renderer, "Player CLIENT WON!", title, 240, 310);
         SDL_RenderPresent(renderer);
     }else{
         SDL_RenderClear(renderer);
@@ -569,7 +570,7 @@ int main(int argc, char** argv){
         // SDL_FreeSurface(finish_bg);
         SDL_RenderCopy(renderer,finish_texture, NULL, NULL);
         // TTF_Font title = TTF_OpenFont("resources/m5x7.ttf", 92);
-        disp_text(renderer, "Player SERVER WON!", title, 200, 310);
+        disp_text(renderer, "Player SERVER WON!", title, 240, 310);
         SDL_RenderPresent(renderer);
     }
     usleep(5000000);
