@@ -282,8 +282,8 @@ void* server_send_loop(void *arg) {
                             //printf("This is the enter a: %d\n", a);
                             //printf("This is the enter b: %d\n", b);
                             if(check_empty(b,a)==1){
-                                players[0].powerup_pos_arrx[check_if_powerup_collect(&players_server[i], &powerup_list)]= a*48+22;
-                                players[0].powerup_pos_arry[check_if_powerup_collect(&players_server[i], &powerup_list)]= b*48+22;
+                                players[0].powerup_pos_arrx[check_if_powerup_collect(&players_server[i], &powerup_list)]= a*48+15;
+                                players[0].powerup_pos_arry[check_if_powerup_collect(&players_server[i], &powerup_list)]= b*48+15;
                                 temp1= temp1+1;
                             }
 
@@ -312,8 +312,8 @@ void* server_send_loop(void *arg) {
                             //printf("This is the enter a: %d\n", a);
                             //printf("This is the enter b: %d\n", b);
                             if(check_empty(b,a)==1){
-                                players[0].powerup_pos_arrx[check_if_powerup_collect(&players_server[i], &powerup_list)]= a*48+22;
-                                players[0].powerup_pos_arry[check_if_powerup_collect(&players_server[i], &powerup_list)]= b*48+22;
+                                players[0].powerup_pos_arrx[check_if_powerup_collect(&players_server[i], &powerup_list)]= a*48+15;
+                                players[0].powerup_pos_arry[check_if_powerup_collect(&players_server[i], &powerup_list)]= b*48+15;
                                 temp1= temp1+1;
                             }
 
@@ -360,16 +360,17 @@ void* server_send_loop(void *arg) {
                 tab[10] = players[0].rand_num;
                 tab[11] = players_server[j].powerup_c;
                 tab[12] = players_server[j].powerupC_start_time;
+                tab[13] = players_server[j].face;
                 
 
                 for(int k=0; k<MAX_POWERUP; k++){
                     int16_t helping= (int16_t)players[0].powerup_pos_arrx[k];
-                    tab[k+13]= helping;
+                    tab[k+14]= helping;
                 }
 
                 for(int k=0; k<MAX_POWERUP; k++){
                     int16_t helping= (int16_t)players[0].powerup_pos_arry[k];
-                    tab[k+13+MAX_POWERUP]= helping;
+                    tab[k+14+MAX_POWERUP]= helping;
                 }
 
 

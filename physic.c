@@ -439,7 +439,7 @@ SDL_Texture* get_map_texture(SDL_Renderer *renderer, int seed) {
     rect.w = TILE_SIZE;
     rect.h = TILE_SIZE;
 
-    bitmap = SDL_LoadBMP("resources/skull.bmp");
+    bitmap = SDL_LoadBMP("resources/wall.bmp");
     SDL_Texture *tex = NULL;
     tex = SDL_CreateTextureFromSurface(renderer, bitmap);
     SDL_FreeSurface(bitmap);
@@ -517,4 +517,3 @@ int check_empty(int x_coor, int y_coor){
     }
 }
     
-
