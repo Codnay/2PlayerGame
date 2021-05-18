@@ -182,8 +182,8 @@ int main(int argc, char** argv){
             "DeathRace",
             SDL_WINDOWPOS_UNDEFINED,
             SDL_WINDOWPOS_UNDEFINED,
-            1280,
             960,
+            720,
             0);
 
     if (window == NULL) {
@@ -222,8 +222,8 @@ int main(int argc, char** argv){
             for (int i = 0; i < MAX_PLAYERS; i++) {
                 //printf("This is the exit b: %d\n", a);
                 //printf("This is the exit b: %d\n", b);
-                players[i].powerup_pos_arrx[check]= a*64+22;
-                players[i].powerup_pos_arry[check]= b*64+22;
+                players[i].powerup_pos_arrx[check]= a*48+15;
+                players[i].powerup_pos_arry[check]= b*48+15;
                 
 
             }
