@@ -58,14 +58,14 @@ void how_to_play(SDL_Renderer *renderer, char *menu, TTF_Font *font){
         SDL_RenderCopy(renderer,background_texture, NULL, NULL);
         // title = TTF_OpenFont("resources/m5x7.ttf", 160);
         disp_text(renderer, "DeathRace", title_deathrace, 275, 20);
-        disp_text(renderer, "This is a two player game.", font, 250, 100);
-        disp_text(renderer, "Players have to reach each other bases, whoever", font, 80, 180);
-        disp_text(renderer, "reaches other's base first 3 times wins!", font, 140, 260);
-        disp_text(renderer, "Each player can fire bullets, fired with Z key, on hit forces ", font, 50, 340);
-        disp_text(renderer, "the opponent to respawn from the starting.", font, 100, 420);
-        disp_text(renderer, "There are some POWERUPS in the path which can increase the player's speed,", font, 5, 500);
-        disp_text(renderer, "make it invincible, or freeze the opponent for a short while.", font, 50, 580);
-        disp_text(renderer, "[r]eturn", font, 275, 640);
+        disp_text(renderer, "This is a two player game.", font, 300, 140);
+        disp_text(renderer, "Players have to reach each other bases, whoever", font, 110, 220);
+        disp_text(renderer, "reaches other's base first 3 times wins!", font, 180, 270);
+        disp_text(renderer, "Each player can fire bullets, fired with Z key, on hit forces ", font, 70, 370);
+        disp_text(renderer, "the opponent to respawn from the starting.", font, 150, 420);
+        disp_text(renderer, "There are some POWERUPS in the path which can increase the player's", font, 5, 520);
+        disp_text(renderer, "speed, make it invincible, or freeze the opponent for a short while.", font, 20, 570);
+        disp_text(renderer, "[r]eturn", font, 450, 640);
         SDL_RenderPresent(renderer);
     }
 }
