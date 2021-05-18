@@ -146,7 +146,7 @@ int get_bullet_array(struct node *list, int16_t **array) {
 
 void* server_send_loop(void *arg) {
     int socket = *((int *) arg);
-    int16_t tab[12+2*MAX_POWERUP];
+    int16_t tab[20+2*MAX_POWERUP];
     //int 
     //int tabx[MAX_POWERUP];
     //int taby[MAX_POWERUP];
@@ -160,14 +160,16 @@ void* server_send_loop(void *arg) {
         for (i = 0; i < number_of_connected_clients; i++) {
             move_player(&players_server[i]);
             if (check_if_player_dies(&players_server[i], &bullets_server, &killer)) {
-                if (i == 0)
-            {
-                players_server[i].position.x = SPAWN_X;
-                players_server[i].position.y = SPAWN_Y;
-            }else{
-                players_server[i].position.x = SPAWN_A;
-                players_server[i].position.y = SPAWN_B;
-            }
+                if (i == 0 && players_server[0].powerup_c!=1)
+                {
+                    players_server[i].position.x = SPAWN_X;
+                    players_server[i].position.y = SPAWN_Y;
+                }
+                else if(i == 1 && players_server[1].powerup_c!=1)
+                {
+                    players_server[i].position.x = SPAWN_A;
+                    players_server[i].position.y = SPAWN_B;
+                }
                 // players_server[i].position.x = SPAWN_A;
                 // players_server[i].position.y = SPAWN_B;
                 players_server[i].deaths++;
@@ -183,6 +185,10 @@ void* server_send_loop(void *arg) {
                 players_server[i].powerupB_start_time-=1;
             }
 
+            if(players_server[i].powerupC_start_time>0){
+                players_server[i].powerupC_start_time-=1;
+            }
+
             if(players_server[i].powerupB_start_time==0){
                 players_server[i].powerup_b= 0;
             }
@@ -190,6 +196,12 @@ void* server_send_loop(void *arg) {
             if(players_server[i].powerupA_start_time==0){
                 players_server[i].powerup_a= 0;
             }
+
+            if(players_server[i].powerupC_start_time==0){
+                players_server[i].powerup_c= 0;
+            }
+
+
         }
 
         for (i = 0; i < number_of_connected_clients; i++) {
@@ -203,31 +215,125 @@ void* server_send_loop(void *arg) {
 
                     if(check_if_powerup_collect(&players_server[i], &powerup_list)== MAX_POWERUP-2){
                         if(i==1){
-                            players[0].win= 1; 
-                            players[0].powerup_pos_arrx[check_if_powerup_collect(&players_server[i], &powerup_list)]= -1; 
+                            players[0].win+= 1; 
+                            //players[0].powerup_pos_arrx[check_if_powerup_collect(&players_server[i], &powerup_list)]= -1;
+                            
+                            players_server[0].position.x = SPAWN_X;
+                            players_server[0].position.y = SPAWN_Y;
+                            players_server[1].position.x = SPAWN_A;
+                            players_server[1].position.y = SPAWN_B;
+                            
+                            
                         }
 
                     }
 
                     else if(check_if_powerup_collect(&players_server[i], &powerup_list)== MAX_POWERUP-1){
                         if(i==0){
-                            players[0].win= 2;  
-                            players[0].powerup_pos_arrx[check_if_powerup_collect(&players_server[i], &powerup_list)]= -1;
+                            players[0].win+= 5;  
+                            //players[0].powerup_pos_arrx[check_if_powerup_collect(&players_server[i], &powerup_list)]= -1;
+                            players_server[0].position.x = SPAWN_X;
+                            players_server[0].position.y = SPAWN_Y;
+                            players_server[1].position.x = SPAWN_A;
+                            players_server[1].position.y = SPAWN_B;
                         }
                     }
 
-                    else if(check_if_powerup_collect(&players_server[i], &powerup_list)%2==0){
+                    else if(check_if_powerup_collect(&players_server[i], &powerup_list)%3==0){
 
                         players_server[i].powerup_a= 1;
                         players_server[i].powerupA_start_time= POWERUPA_APPLY_TIME;
-                        players[0].powerup_pos_arrx[check_if_powerup_collect(&players_server[i], &powerup_list)]= -1;
+
+                        int temp1=0;
+                        while(temp1!=1){
+                            int a= rand()%20;
+                            int b= rand()%15;
+                            //printf("This is the enter a: %d\n", a);
+                            //printf("This is the enter b: %d\n", b);
+                            if(check_empty(b,a)==1){
+                                players[0].powerup_pos_arrx[check_if_powerup_collect(&players_server[i], &powerup_list)]= a*64+22;
+                                players[0].powerup_pos_arry[check_if_powerup_collect(&players_server[i], &powerup_list)]= b*64+22;
+                                temp1= temp1+1;
+                            }
+
+                        
+                        }
+
+                        struct PowerUp temp;
+
+                        temp.position.x = players[0].powerup_pos_arrx[check_if_powerup_collect(&players_server[i], &powerup_list)];
+                        temp.position.y = players[0].powerup_pos_arry[check_if_powerup_collect(&players_server[i], &powerup_list)];
+
+                        temp.position.w = POWERUP_WIDTH;
+                        temp.position.h = POWERUP_HEIGHT;
+                        push_element_powerup(&powerup_list, &temp ,sizeof(struct PowerUp), check_if_powerup_collect(&players_server[i], &powerup_list));
+                        erase_element(&powerup_list, check_if_powerup_collect(&players_server[i], &powerup_list));
+
                     }
 
-                    else{
+                    else if(check_if_powerup_collect(&players_server[i], &powerup_list)%3==1){
                         players_server[1-i].powerup_b= 1;
                         players_server[1-i].powerupB_start_time= POWERUPB_APPLY_TIME;
-                        players[0].powerup_pos_arrx[check_if_powerup_collect(&players_server[i], &powerup_list)]= -1;
+
+                        int temp1=0;
+                        while(temp1!=1){
+                            int a= rand()%20;
+                            int b= rand()%15;
+                            //printf("This is the enter a: %d\n", a);
+                            //printf("This is the enter b: %d\n", b);
+                            if(check_empty(b,a)==1){
+                                players[0].powerup_pos_arrx[check_if_powerup_collect(&players_server[i], &powerup_list)]= a*64+22;
+                                players[0].powerup_pos_arry[check_if_powerup_collect(&players_server[i], &powerup_list)]= b*64+22;
+                                temp1= temp1+1;
+                            }
+
+                        
+                        }
+
+                        struct PowerUp temp;
+
+                        temp.position.x = players[0].powerup_pos_arrx[check_if_powerup_collect(&players_server[i], &powerup_list)];
+                        temp.position.y = players[0].powerup_pos_arry[check_if_powerup_collect(&players_server[i], &powerup_list)];
+
+                        temp.position.w = POWERUP_WIDTH;
+                        temp.position.h = POWERUP_HEIGHT;
+                        push_element_powerup(&powerup_list, &temp ,sizeof(struct PowerUp), check_if_powerup_collect(&players_server[i], &powerup_list));
+                        erase_element(&powerup_list, check_if_powerup_collect(&players_server[i], &powerup_list));
                     }
+
+                    else if(check_if_powerup_collect(&players_server[i], &powerup_list)%3==2){
+                        players_server[i].powerup_c=1;
+                        players_server[i].powerupB_start_time= POWERUPC_APPLY_TIME;
+
+                        int temp1=0;
+                        while(temp1!=1){
+                            int a= rand()%20;
+                            int b= rand()%15;
+                            //printf("This is the enter a: %d\n", a);
+                            //printf("This is the enter b: %d\n", b);
+                            if(check_empty(b,a)==1){
+                                players[0].powerup_pos_arrx[check_if_powerup_collect(&players_server[i], &powerup_list)]= a*64+22;
+                                players[0].powerup_pos_arry[check_if_powerup_collect(&players_server[i], &powerup_list)]= b*64+22;
+                                temp1= temp1+1;
+                            }
+
+                        
+                        }
+
+                        struct PowerUp temp;
+
+                        temp.position.x = players[0].powerup_pos_arrx[check_if_powerup_collect(&players_server[i], &powerup_list)];
+                        temp.position.y = players[0].powerup_pos_arry[check_if_powerup_collect(&players_server[i], &powerup_list)];
+
+                        temp.position.w = POWERUP_WIDTH;
+                        temp.position.h = POWERUP_HEIGHT;
+                        push_element_powerup(&powerup_list, &temp ,sizeof(struct PowerUp), check_if_powerup_collect(&players_server[i], &powerup_list));
+                        erase_element(&powerup_list, check_if_powerup_collect(&players_server[i], &powerup_list));
+
+                    }
+                    
+                     
+                    //players[0].powerup_pos
                 }
                 //}
                 //printf("This is the power value: %d\n", players_server[i].powerup_a);
@@ -251,17 +357,22 @@ void* server_send_loop(void *arg) {
                 tab[7] = players_server[j].powerup_b;
                 tab[8] = players_server[j].powerupB_start_time;
                 tab[9] = players[0].win;
+                tab[10] = players[0].rand_num;
+                tab[11] = players_server[j].powerup_c;
+                tab[12] = players_server[j].powerupC_start_time;
                 
 
                 for(int k=0; k<MAX_POWERUP; k++){
                     int16_t helping= (int16_t)players[0].powerup_pos_arrx[k];
-                    tab[k+10]= helping;
+                    tab[k+13]= helping;
                 }
 
                 for(int k=0; k<MAX_POWERUP; k++){
                     int16_t helping= (int16_t)players[0].powerup_pos_arry[k];
-                    tab[k+10+MAX_POWERUP]= helping;
+                    tab[k+13+MAX_POWERUP]= helping;
                 }
+
+
                 // for(int i=0; i<MAX_POWERUP; i++){
                 //     tabx[i]= players[0].powerup_poss_arrx[i];
                 // }
@@ -270,7 +381,7 @@ void* server_send_loop(void *arg) {
                 // }
                 //tab[5] = players_server[j].powerup_pos_arrx;
                 //tab[6] = players_server[j].powerup_pos_arry;
-                send_data(socket, clients_addresses[i], tab, 12+ 2*MAX_POWERUP);
+                send_data(socket, clients_addresses[i], tab, 20+ 2*MAX_POWERUP);
                 usleep(20);
             }
             send_data(socket, clients_addresses[i], bullet_array, 1 + (bullets_n * 2));

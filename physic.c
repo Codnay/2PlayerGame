@@ -1,7 +1,7 @@
 #include "physic.h"
 #include "constans.h"
 //------------
-#include <SDL_image.h>
+#include <SDL2/SDL_image.h>
 #include <stdio.h>
 #include <stdlib.h>
 #include <time.h>

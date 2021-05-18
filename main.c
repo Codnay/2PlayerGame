@@ -1,8 +1,8 @@
-#include <stdio.h>
+
 #include <SDL.h>
 #include <SDL_ttf.h>
-#include<SDL2/SDL_mixer.h>
-#include <SDL_image.h>
+#include <SDL2/SDL_mixer.h>
+#include <SDL2/SDL_image.h>
 #include <pthread.h>
 //#include <iostream>
 #include <time.h>
@@ -23,6 +23,7 @@ int16_t bullets_client[256];
 int check= 0;
 int bullets_number = 0;
 int powerup_number= 0;
+
 
 SDL_Texture* load_texture(SDL_Renderer *renderer, char *file) {
     SDL_Surface *bitmap = NULL;
@@ -63,6 +64,7 @@ void init_players() {
         players[i].reloading = false;
         players[i].kills = 0;
         players[i].deaths = 0;
+        players[i].win= 0;
         players[i].powerup_a= 0;
     }
 }
@@ -105,17 +107,20 @@ void* client_loop(void *arg) {
             players[id].powerup_b= tab[7];
             players[id].powerupB_start_time= tab[8];
             players[0].win= tab[9];
+            players[0].rand_num= tab[10];
+            players[id].powerup_c= tab[11];
+            players[id].powerupC_start_time= tab[12];
 
 
             for(int k= 0; k<MAX_POWERUP; k++){
                 int helper;
-                helper= (int)tab[k+10];
+                helper= (int)tab[k+13];
                 players[0].powerup_pos_arrx[k]= helper;
             }
 
             for(int k= 0; k<MAX_POWERUP; k++){
                 int helper;
-                helper=  (int)tab[k+10+MAX_POWERUP];
+                helper=  (int)tab[k+13+MAX_POWERUP];
                 players[0].powerup_pos_arry[k]= helper;
             }
 
@@ -154,6 +159,7 @@ int main(int argc, char** argv){
     SDL_Texture *powerup= NULL;
     SDL_Texture *powerA= NULL;
     SDL_Texture *powerB= NULL;
+    SDL_Texture *powerC= NULL;
     SDL_Texture *flag_server= NULL;
     SDL_Texture *flag_client= NULL;
     SDL_Texture *mapper = NULL;
@@ -164,6 +170,12 @@ int main(int argc, char** argv){
     font = TTF_OpenFont("resources/m5x7.ttf", 48);
     init_players();
 
+    //srand((unsigned int)time(NULL));
+
+    // players[0].rand_num= rand();
+    // for(int i=0; i<MAX_PLAYERS; i++){
+    //     players[i].rand_num= players[0].rand_num;
+    // }
 
 
     window = SDL_CreateWindow(
@@ -179,7 +191,7 @@ int main(int argc, char** argv){
         return 1;
     }
 
-    int imgFlags = IMG_INIT_PNG;
+    //int imgFlags = IMG_INIT_PNG;
 
     renderer = SDL_CreateRenderer(window, -1,
             SDL_RENDERER_ACCELERATED | SDL_RENDERER_PRESENTVSYNC);
@@ -190,9 +202,14 @@ int main(int argc, char** argv){
         SDL_Quit();
         return 1;
     }
+
+    //seed= players[0].rand_num;
+
     mapper = get_map_texture(renderer, seed);
 
     //srand((unsigned int)time(NULL));
+
+    //srand()
 
     while(check<MAX_POWERUP-2){
         
@@ -225,7 +242,7 @@ int main(int argc, char** argv){
 
 
 
-    srand(seed);
+    //srand(seed);
 
     tex = load_texture(renderer, "resources/player.bmp");
     bullet = load_texture(renderer, "resources/bullet.bmp");
@@ -244,6 +261,10 @@ int main(int argc, char** argv){
     SDL_Surface *POWERB = IMG_Load("resources/powerB.png");
     powerB = SDL_CreateTextureFromSurface(renderer, POWERB);
     SDL_FreeSurface(POWERB);
+
+    SDL_Surface *POWERC = IMG_Load("resources/bullet.bmp");
+    powerC = SDL_CreateTextureFromSurface(renderer, POWERC);
+    SDL_FreeSurface(POWERC);
 
 
     init();
@@ -291,11 +312,11 @@ int main(int argc, char** argv){
     SDL_Event e;
 
     
-
+    
     //unsigned int last_time, current_time;
 
     
-    int who_won;
+    int who_won= 0;
 
     while (1) {
 
@@ -318,7 +339,7 @@ int main(int argc, char** argv){
 
         //printf("This is the time: %d\n", players[my_id].powerupA_start_time);
         //printf("This is the power value: %d\n", players[my_id].powerup_a);
-        if(players[0].win== 1){
+        if(players[0].win%5==3){
             //THE CLIENT WON
             who_won = 1;
             break;
@@ -327,20 +348,40 @@ int main(int argc, char** argv){
 
         }
 
-        if(players[0].win==2){
+        if(players[0].win/5==3){
             //THE SERVER WON
             who_won = 0;
             break;
             // printf("Player SERVER won \n");
         }
-
+        //printf("The id is: %hd", my_id);
         send_to_server(sock_client, server_addr, my_id, key_state_from_player(&players[my_id]));
         usleep(30);
         SDL_RenderClear(renderer);
+        //printf("This is the powerup id: %d\n", my_id);
+        printf("This is the powerup value: %d\n", players[my_id].powerup_c);
         SDL_RenderCopy(renderer, mapper, NULL, NULL);
-        for (i = 0; i <= number_of_players; i++) {
-            SDL_RenderCopy(renderer, tex, NULL, &players[i].position);
-        }
+        //for (i = 0; i <= number_of_players; i++) {
+            //if(players[i].power_c!=1)
+
+
+            // if(my_id==1&& players[1].powerup_c==1){
+            //     printf("Here only client sees himself ");
+
+            //     SDL_RenderCopy(renderer, tex, NULL, &players[1].position);
+            // }
+            
+            // else if(my_id==0 && players[0].powerup_c==1){
+            //     printf("Here only player sees himself ");
+            //     SDL_RenderCopy(renderer, tex, NULL, &players[0].position);
+            // }
+
+            // else{
+                for(int i=0; i<=number_of_players; i++){
+                    SDL_RenderCopy(renderer, tex, NULL, &players[i].position);
+                }
+            
+        //}
 
         // disp_text(renderer, "kills", font, 400, 10);
         for (i = 0; i <= number_of_players; i++) {
@@ -361,6 +402,8 @@ int main(int argc, char** argv){
             bullet_pos.y = bullets_client[i*2 + 1];
             SDL_RenderCopy(renderer, bullet, NULL, &bullet_pos);
         }
+
+
         
         /*
         unsigned int current_time= SDL_GetTicks();
@@ -392,7 +435,7 @@ int main(int argc, char** argv){
 
         for(int i=0; i< MAX_POWERUP; i++){
 
-            if(players[0].powerup_pos_arrx[i]!=-1){
+            
                 //printf("This is wakanda %d\n", powerup_pos_arrx[i]);
                 powerup_pos.x= players[0].powerup_pos_arrx[i];
                 powerup_pos.y= players[0].powerup_pos_arry[i];
@@ -407,19 +450,40 @@ int main(int argc, char** argv){
                     SDL_RenderCopy(renderer, flag_client, NULL, &powerup_pos);
                 }
 
-                else if(i%2==0){
+                else if(i%3==0){
                     //SPEEDUP
                     SDL_RenderCopy(renderer, powerA, NULL, &powerup_pos);
                 }
 
-                else{
+                else if(i%3==1){
                     //SPEEDDOWN
                     SDL_RenderCopy(renderer, powerB, NULL, &powerup_pos);
                 }
 
+                else if(i%3==2){
+                    //Invisibilty
+                    SDL_RenderCopy(renderer, powerC, NULL, &powerup_pos);
+                }
 
-            }
+
+            
         }
+
+
+
+        
+
+        //-----------
+        //Print the display here-
+
+        //for player server- print players[0].win/5
+        //for player client- print players[0].win%5
+        
+
+
+
+
+        //----------
 
         // disp_text(renderer, "power", font, 520, 10);
         for (i = 0; i <= number_of_players; i++) {

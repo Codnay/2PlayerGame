@@ -12,6 +12,7 @@ struct Player {
     int powerup_pos_arry[MAX_POWERUP];
     int can_jump, y_speed;
     int face, shoot, reloading;
+    int rand_num;
     //int powerupA_active;
     //int powerupB_active;
 
@@ -20,11 +21,13 @@ struct Player {
 
     unsigned int powerupA_start_time;
     unsigned int powerupB_start_time;
+    unsigned int powerupC_start_time;
     //unsigned int 
 
     int left_key, right_key, up_key, down_key, attack_key, powerA_key;
     int powerup_a;
     int powerup_b;
+    int powerup_c;
     int win;
     int kills, deaths;
 };
