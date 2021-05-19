@@ -71,13 +71,13 @@ void init_players() {
 void receive_new_id(int id) {
     my_id = id;
     number_of_players = id;
-    printf("my_id is now: %d\n", my_id);
+    //printf("my_id is now: %d\n", my_id);
 }
 
 void check_if_its_new_player(int id){
     if (id > number_of_players) {
         number_of_players = id;
-        printf("new max player, now %d\n", number_of_players + 1);
+        //printf("new max player, now %d\n", number_of_players + 1);
     }
 }
 
@@ -290,7 +290,7 @@ int main(int argc, char** argv){
         fix_or_random(renderer, &menu, font);
 
         srand((unsigned int)time(NULL));
-        int seed;
+        int seed=0;
         if (menu == 'd'){
             seed = 53;
         }else if(menu == 'n'){

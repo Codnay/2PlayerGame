@@ -633,6 +633,7 @@ int map_modify(int seed){
     {
         map[i][19] = 1;
     }
+    return 0;
 }
 
 int check_empty(int x_coor, int y_coor){
@@ -643,5 +644,6 @@ int check_empty(int x_coor, int y_coor){
     else{
         return 1;
     }
+    return 0;
 }
    

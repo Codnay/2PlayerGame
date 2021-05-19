@@ -39,7 +39,7 @@ void erase_element(struct node **head, int n) {
 void push_element_powerup(struct node **head, void *data, size_t data_size, int n){
 	struct node* new_node = malloc(sizeof(struct node));
     new_node->data = malloc(data_size);
-    int i;
+    //int i;
     struct node *tmp = *head;
     if(n == 0){
     	new_node->next = *head;
