@@ -10,6 +10,7 @@ struct Player {
     int left, right, up, down, powerA;
     int powerup_pos_arrx[MAX_POWERUP];
     int powerup_pos_arry[MAX_POWERUP];
+    int map_array[15][20];
     int can_jump, y_speed;
     int face, shoot, reloading;
     int rand_num;

@@ -146,7 +146,7 @@ int get_bullet_array(struct node *list, int16_t **array) {
 
 void* server_send_loop(void *arg) {
     int socket = *((int *) arg);
-    int16_t tab[20+2*MAX_POWERUP];
+    int16_t tab[320+2*MAX_POWERUP];
     //int 
     //int tabx[MAX_POWERUP];
     //int taby[MAX_POWERUP];
@@ -373,6 +373,14 @@ void* server_send_loop(void *arg) {
                     tab[k+14+MAX_POWERUP]= helping;
                 }
 
+                for(int k=0; k<15; k++){
+                    for(int j=0; j<20; j++){
+                        int16_t helping= (int16_t)players[0].map_array[k][j];
+                        tab[14+2*MAX_POWERUP+ k*20+j] = helping;
+                    }
+                    
+                }
+
 
                 // for(int i=0; i<MAX_POWERUP; i++){
                 //     tabx[i]= players[0].powerup_poss_arrx[i];
@@ -382,7 +390,7 @@ void* server_send_loop(void *arg) {
                 // }
                 //tab[5] = players_server[j].powerup_pos_arrx;
                 //tab[6] = players_server[j].powerup_pos_arry;
-                send_data(socket, clients_addresses[i], tab, 20+ 2*MAX_POWERUP);
+                send_data(socket, clients_addresses[i], tab, 320+ 2*MAX_POWERUP);
                 usleep(20);
             }
             send_data(socket, clients_addresses[i], bullet_array, 1 + (bullets_n * 2));

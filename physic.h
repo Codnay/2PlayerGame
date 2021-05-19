@@ -18,6 +18,8 @@ int map[15][20];
 //int powerup_pos_arry[MAX_POWERUP];
 void move_player(struct Player *player); 
 SDL_Texture* get_map_texture(SDL_Renderer *renderer, int seed);
+int map_modify(int seed);
+SDL_Texture* get_map_texture_arr(SDL_Renderer *renderer, int arr[15][20]);
 void move_bullets(struct node **bullets);
 int check_if_player_dies(struct Player *player, struct node **bullets, int *killer);
 int check_if_powerup_collect(struct Player *player, struct node **powerup);

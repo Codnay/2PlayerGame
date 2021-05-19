@@ -124,6 +124,15 @@ void* client_loop(void *arg) {
                 players[0].powerup_pos_arry[k]= helper;
             }
 
+            for(int k=0; k<15; k++){
+                for(int j=0; j<20; j++){
+                    int helper;
+                    helper=  (int)tab[14+2*MAX_POWERUP+ k*20+j];
+                    players[0].map_array[k][j]= helper;
+                }
+                
+            }
+
             // for(int i=0; i< MAX_POWERUP; i++){
             //     players[0].powerup_pos_arrx[i]= tabx[i];
             //     players[0].powerup_pos_arry[i]= taby[i];
@@ -145,10 +154,14 @@ void* client_loop(void *arg) {
 }
 
 int main(int argc, char** argv){
-    int seed = atoi(argv[1]);
+    //int seed = atoi(argv[1]);
     struct sockaddr_in server_addr, client_addr;
     int sock_server, sock_client;
     char *server_ip_addr = NULL;
+
+
+    srand((unsigned int)time(NULL));
+    int seed= rand();
 
     char menu = 's';
     SDL_Window *window;
@@ -213,7 +226,16 @@ int main(int argc, char** argv){
 
     //seed= players[0].rand_num;
 
-    mapper = get_map_texture(renderer, seed);
+    map_modify(seed);
+
+    for(int i=0; i<MAX_PLAYERS; i++){
+        for(int k=0; k<15; k++){
+            for(int j=0; j<20; j++){
+                players[i].map_array[k][j]= map[k][j];
+            }
+            
+        }
+    }
 
     //srand((unsigned int)time(NULL));
 
@@ -335,9 +357,9 @@ int main(int argc, char** argv){
     SDL_Event e;
 
     
-    
+    int helper=0;
     //unsigned int last_time, current_time;
-
+    int temp=0;
     
     int who_won= 0;
 
@@ -352,6 +374,16 @@ int main(int argc, char** argv){
             start(e);
         }
 
+        if(temp<10){
+            for(int i=0; i<15; i++){
+                for(int j=0; j<20; j++){
+                    map[i][j]= players[0].map_array[i][j];
+                }
+            }
+            mapper= get_map_texture_arr(renderer, map);
+            temp= temp+1;
+        }
+
         //current_time= SDL_GetTicks();
         //printf("This is the time stored: %d\n", players[my_id].powerupA_start_time);
         //if(current_time- players[my_id].powerupA_start_time>3000){
@@ -359,9 +391,17 @@ int main(int argc, char** argv){
         //    players[my_id].powerupA_active= 0;
         //     players[my_id].powerupA_start_time= current_time;
         // }
+        // if(helper<5){
+        //     for(int k=0; k<15; k++){
+        //         for(int j=0; j<20; j++){
+        //             printf("%d ", players[0].map_array[k][j]);
+        //         }
+                
+        //     }
+        //     helper=helper+1;
+        // }
 
-        //printf("This is the time: %d\n", players[my_id].powerupA_start_time);
-        //printf("This is the power value: %d\n", players[my_id].powerup_a);
+        //printf("This iser value: %d\n", players[my_id].powerup_a);
         if(players[0].win%5==3){
             //THE CLIENT WON
             who_won = 1;

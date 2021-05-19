@@ -24,7 +24,7 @@
 #define SERVER_FRAME_TIME 15
 #define X_AXIS 1
 #define Y_AXIS 0
-#define BUF_MAX 256
+#define BUF_MAX 400
 #define SPAWN_X 48
 #define SPAWN_Y 624
 #define LEFT_KEY 0x01

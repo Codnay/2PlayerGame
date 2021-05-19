@@ -507,6 +507,134 @@ SDL_Texture* get_map_texture(SDL_Renderer *renderer, int seed) {
     return map_texture;
 }
 
+
+SDL_Texture* get_map_texture_arr(SDL_Renderer *renderer, int arr[15][20]) {
+    SDL_Surface *bitmap = NULL;
+    SDL_Texture *map_texture;
+    SDL_Rect rect;
+    rect.w = TILE_SIZE;
+    rect.h = TILE_SIZE;
+
+    bitmap = SDL_LoadBMP("resources/wall.bmp");
+    SDL_Texture *tex = NULL;
+    tex = SDL_CreateTextureFromSurface(renderer, bitmap);
+    SDL_FreeSurface(bitmap);
+    map_texture = SDL_CreateTexture(renderer,SDL_PIXELFORMAT_RGBA8888, SDL_TEXTUREACCESS_TARGET, SCREEN_WIDTH, SCREEN_HEIGHT);
+    SDL_SetRenderTarget(renderer, map_texture);
+
+    //---------------------------------------------------------
+
+    // srand(seed);
+    // initialize();
+    // generate();
+
+
+
+    // for (int x = 1; x < xsize-1; ++x)
+    // {
+    //     for (int y = 1; y < ysize-1; ++y)
+    //     {
+    //         if (MAZE[x][y].up == 1)
+    //         {
+    //             map[x-1][y] = 1;
+    //         }else{
+    //             map[x-1][y] = 0;
+    //         }
+    //         if (MAZE[x][y].left == 1)
+    //         {
+    //             map[x][y-1] = 1;
+    //         }else{
+    //             map[x][y-1] = 0;
+    //         }
+    //     }
+    // // }
+    // int height = 19;
+    // int width = 15;
+    // for(int y = 0; y <= height - 1; y++){
+    //     for(int x = 0; x <= width - 1; x++){
+    //         if(x%2 == 1 && y%2 == 1){
+    //             if(MAZE[x/2+1][y/2+1].in) map[x][y] = 0; else map[x][y] = 1;
+    //         }else if(x%2 == 0 && y%2 == 0){
+    //             map[x][y] = 1;
+    //         }else if(x%2 == 0 && y%2 == 1){
+    //             if(MAZE[x/2+1][y/2+1].left) map[x][y] = 1; else map[x][y] = 0;
+    //         }else if(x%2 == 1 && y%2 == 0){
+    //             if(MAZE[x/2+1][y/2+1].up) map[x][y] = 1; else map[x][y] = 0;
+    //         }
+    //     }
+    // }
+    // for (int i = 0; i < 15; ++i)
+    // {
+    //     map[i][19] = 1;
+    // }
+    //---------------------------------------------------------
+
+    for(int i=0; i<15; i++){
+        for(int j=0; j<20; j++){
+            map[i][j]= arr[i][j];
+        }
+    }
+
+    int i, j;
+    for (i = 0; i < SCREEN_HEIGHT / TILE_SIZE; i++) {
+        for (j = 0; j < SCREEN_WIDTH / TILE_SIZE; j++) {
+            if (map[i][j]) {
+                rect.x = TILE_SIZE * j;
+                rect.y = TILE_SIZE * i;
+                SDL_RenderCopy(renderer, tex, NULL, &rect);
+            }
+        }
+    }
+    SDL_SetRenderTarget(renderer, NULL);
+    return map_texture;
+}
+
+int map_modify(int seed){
+    srand(seed);
+    initialize();
+    generate();
+
+
+
+    // for (int x = 1; x < xsize-1; ++x)
+    // {
+    //     for (int y = 1; y < ysize-1; ++y)
+    //     {
+    //         if (MAZE[x][y].up == 1)
+    //         {
+    //             map[x-1][y] = 1;
+    //         }else{
+    //             map[x-1][y] = 0;
+    //         }
+    //         if (MAZE[x][y].left == 1)
+    //         {
+    //             map[x][y-1] = 1;
+    //         }else{
+    //             map[x][y-1] = 0;
+    //         }
+    //     }
+    // }
+    int height = 19;
+    int width = 15;
+    for(int y = 0; y <= height - 1; y++){
+        for(int x = 0; x <= width - 1; x++){
+            if(x%2 == 1 && y%2 == 1){
+                if(MAZE[x/2+1][y/2+1].in) map[x][y] = 0; else map[x][y] = 1;
+            }else if(x%2 == 0 && y%2 == 0){
+                map[x][y] = 1;
+            }else if(x%2 == 0 && y%2 == 1){
+                if(MAZE[x/2+1][y/2+1].left) map[x][y] = 1; else map[x][y] = 0;
+            }else if(x%2 == 1 && y%2 == 0){
+                if(MAZE[x/2+1][y/2+1].up) map[x][y] = 1; else map[x][y] = 0;
+            }
+        }
+    }
+    for (int i = 0; i < 15; ++i)
+    {
+        map[i][19] = 1;
+    }
+}
+
 int check_empty(int x_coor, int y_coor){
     if(map[x_coor][y_coor]== 1){
         return 0;
