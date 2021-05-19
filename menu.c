@@ -32,7 +32,9 @@ void server_or_client(SDL_Renderer *renderer, char *menu, TTF_Font *font){
         SDL_RenderCopy(renderer,background_texture, NULL, NULL);
         // title_deathrace = TTF_OpenFont("resources/m5x7.ttf", 160);
         disp_text(renderer, "DeathRace", title_deathrace, 275, 20);
-        disp_text(renderer, "[s]erver or [c]lient?", font, 325, 400);
+        disp_text(renderer, "[s]Host a Game", font, 375, 340);
+        disp_text(renderer, "OR", font, 480, 400);
+        disp_text(renderer, "[c]Join a Game", font, 375, 460);
         disp_text(renderer, "[h]ow to play?", font, 375, 600);
         SDL_RenderPresent(renderer);
     }
@@ -106,8 +108,8 @@ void ask_for_ip(SDL_Renderer *renderer, TTF_Font *font, char *ip) {
         SDL_RenderCopy(renderer,background_texture, NULL, NULL);
         // title = TTF_OpenFont("resources/m5x7.ttf", 160);
         disp_text(renderer, "DeathRace", title_deathrace, 275, 20);
-        disp_text(renderer, "ip addres", font, 275, 400);
-        disp_text(renderer, ip, font, 275, 460);
+        disp_text(renderer, "ip addres", font, 375, 400);
+        disp_text(renderer, ip, font, 375, 460);
         SDL_RenderPresent(renderer);
     }
 }
