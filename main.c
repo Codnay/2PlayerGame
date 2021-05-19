@@ -159,10 +159,6 @@ int main(int argc, char** argv){
     int sock_server, sock_client;
     char *server_ip_addr = NULL;
 
-
-    srand((unsigned int)time(NULL));
-    int seed= rand();
-
     char menu = 's';
     SDL_Window *window;
     SDL_Renderer *renderer;
@@ -226,54 +222,6 @@ int main(int argc, char** argv){
         return 1;
     }
 
-    //seed= players[0].rand_num;
-
-    map_modify(seed);
-
-    for(int i=0; i<MAX_PLAYERS; i++){
-        for(int k=0; k<15; k++){
-            for(int j=0; j<20; j++){
-                players[i].map_array[k][j]= map[k][j];
-            }
-            
-        }
-    }
-
-    //srand((unsigned int)time(NULL));
-
-    //srand()
-
-    while(check<MAX_POWERUP-2){
-        
-        int a= rand()%20;
-        int b= rand()%15;
-        //printf("This is the enter a: %d\n", a);
-        //printf("This is the enter b: %d\n", b);
-        if(check_empty(b,a)==1){
-            //printf("This is the exit a: %d\n", a);
-            for (int i = 0; i < MAX_PLAYERS; i++) {
-                //printf("This is the exit b: %d\n", a);
-                //printf("This is the exit b: %d\n", b);
-                players[i].powerup_pos_arrx[check]= a*48+12;
-                players[i].powerup_pos_arry[check]= b*48+12;
-                
-
-            }
-            //printf("This is the exit a: %d\n", players[0].powerup_pos_arrx[check]);
-            //printf("This is the exit b: %d\n", players[0].powerup_pos_arrx[check]);
-            check+=1;
-
-        }
-    }
-    for (int i = 0; i < MAX_PLAYERS; i++) {
-        players[i].powerup_pos_arrx[MAX_POWERUP-2]= SPAWN_X;
-        players[i].powerup_pos_arry[MAX_POWERUP-2]= SPAWN_Y;
-        players[i].powerup_pos_arrx[MAX_POWERUP-1]= SPAWN_A;
-        players[i].powerup_pos_arry[MAX_POWERUP-1]= SPAWN_B;
-    }
-
-
-
     //srand(seed);
 
     tex1_up = load_texture(renderer, "resources/player1_up.bmp");
@@ -317,6 +265,7 @@ int main(int argc, char** argv){
     SDL_FreeSurface(background);
     title_deathrace = TTF_OpenFont("resources/m5x7.ttf", 140);
     server_or_client(renderer, &menu, font);
+
     while(menu != 's' && menu != 'c'){
         if (menu == 'h') {
             // server_ip_addr = malloc(16 * sizeof(char));
@@ -335,14 +284,67 @@ int main(int argc, char** argv){
     pthread_t thread_id_server, thread_id_client, thread_id_server_send;
     server_addr = server_sock_addr(server_ip_addr);
     client_addr = client_sock_addr();
+
     if(menu == 's') {
+
+        fix_or_random(renderer, &menu, font);
+
+        srand((unsigned int)time(NULL));
+        int seed;
+        if (menu == 'd'){
+            seed = 53;
+        }else if(menu == 'n'){
+            seed= rand();
+        }
+
+        map_modify(seed);
+
+        for(int i=0; i<MAX_PLAYERS; i++){
+            for(int k=0; k<15; k++){
+                for(int j=0; j<20; j++){
+                    players[i].map_array[k][j]= map[k][j];
+                }
+                
+            }
+        }
+
+        while(check<MAX_POWERUP-2){
+        
+            int a= rand()%20;
+            int b= rand()%15;
+            //printf("This is the enter a: %d\n", a);
+            //printf("This is the enter b: %d\n", b);
+            if(check_empty(b,a)==1){
+                //printf("This is the exit a: %d\n", a);
+                for (int i = 0; i < MAX_PLAYERS; i++) {
+                    //printf("This is the exit b: %d\n", a);
+                    //printf("This is the exit b: %d\n", b);
+                    players[i].powerup_pos_arrx[check]= a*48+12;
+                    players[i].powerup_pos_arry[check]= b*48+12;
+                    
+
+                }
+                //printf("This is the exit a: %d\n", players[0].powerup_pos_arrx[check]);
+                //printf("This is the exit b: %d\n", players[0].powerup_pos_arrx[check]);
+                check+=1;
+
+            }
+        }
+        for (int i = 0; i < MAX_PLAYERS; i++) {
+            players[i].powerup_pos_arrx[MAX_POWERUP-2]= SPAWN_X;
+            players[i].powerup_pos_arry[MAX_POWERUP-2]= SPAWN_Y;
+            players[i].powerup_pos_arrx[MAX_POWERUP-1]= SPAWN_A;
+            players[i].powerup_pos_arry[MAX_POWERUP-1]= SPAWN_B;
+        }
+
         prepare_server(&sock_server, &server_addr);
         pthread_create(&thread_id_server, NULL, server_receive_loop, &sock_server);
         pthread_create(&thread_id_server_send, NULL, server_send_loop, &sock_server);
     }
     prepare_client(&sock_client, &client_addr);
     pthread_create(&thread_id_client, NULL, client_loop, &sock_client);
-
+   
+    
     while (my_id < 0) {
         send_to_server(sock_client, server_addr, my_id, 0);
         usleep(100);
