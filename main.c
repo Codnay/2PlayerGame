@@ -189,6 +189,8 @@ int main(int argc, char** argv){
 
     TTF_Font *font;
     font = TTF_OpenFont("resources/m5x7.ttf", 40);
+    TTF_Font *font2;
+    font2 = TTF_OpenFont("resources/m5x7.ttf", 32);
     init_players();
 
     //srand((unsigned int)time(NULL));
@@ -252,8 +254,8 @@ int main(int argc, char** argv){
             for (int i = 0; i < MAX_PLAYERS; i++) {
                 //printf("This is the exit b: %d\n", a);
                 //printf("This is the exit b: %d\n", b);
-                players[i].powerup_pos_arrx[check]= a*48+15;
-                players[i].powerup_pos_arry[check]= b*48+15;
+                players[i].powerup_pos_arrx[check]= a*48+12;
+                players[i].powerup_pos_arry[check]= b*48+12;
                 
 
             }
@@ -264,10 +266,10 @@ int main(int argc, char** argv){
         }
     }
     for (int i = 0; i < MAX_PLAYERS; i++) {
-        players[i].powerup_pos_arrx[MAX_POWERUP-2]= SPAWN_X+22;
-        players[i].powerup_pos_arry[MAX_POWERUP-2]= SPAWN_Y+22;
-        players[i].powerup_pos_arrx[MAX_POWERUP-1]= SPAWN_A+22;
-        players[i].powerup_pos_arry[MAX_POWERUP-1]= SPAWN_B+22;
+        players[i].powerup_pos_arrx[MAX_POWERUP-2]= SPAWN_X;
+        players[i].powerup_pos_arry[MAX_POWERUP-2]= SPAWN_Y;
+        players[i].powerup_pos_arrx[MAX_POWERUP-1]= SPAWN_A;
+        players[i].powerup_pos_arry[MAX_POWERUP-1]= SPAWN_B;
     }
 
 
@@ -357,7 +359,7 @@ int main(int argc, char** argv){
     SDL_Event e;
 
     
-    int helper=0;
+    // int helper=0;
     //unsigned int last_time, current_time;
     int temp=0;
     
@@ -440,44 +442,17 @@ int main(int argc, char** argv){
             // }
 
             // else{
-        for(int i=0; i<=number_of_players; i++){
-            if (i == 0)
-            {   if(players[i].face == -1){
-                //left
-                    SDL_RenderCopy(renderer, tex1_left, NULL, &players[i].position);
-                }else if(players[i].face == 1){
-                    //right
-                    SDL_RenderCopy(renderer, tex1_right, NULL, &players[i].position);
-                }else if(players[i].face == -2){
-                    //up
-                    SDL_RenderCopy(renderer, tex1_up, NULL, &players[i].position);
-                }else{
-                    //down
-                    SDL_RenderCopy(renderer, tex1_down, NULL, &players[i].position);
-                }
-                // SDL_RenderCopy(renderer, tex1, NULL, &players[i].position);
-            }else{
-                if(players[i].face == -1){
-                    SDL_RenderCopy(renderer, tex2_left, NULL, &players[i].position);
-                //left
-                }else if(players[i].face == 1){
-                    //right
-                    SDL_RenderCopy(renderer, tex2_right, NULL, &players[i].position);
-                }else if(players[i].face == -2){
-                    //up
-                    SDL_RenderCopy(renderer, tex2_up, NULL, &players[i].position);
-                }else{
-                    //down
-                    SDL_RenderCopy(renderer, tex2_down, NULL, &players[i].position);
-                }
-                // SDL_RenderCopy(renderer, tex2, NULL, &players[i].position);
-            }
-            
-        }
+        
             
         //}
-
-        // disp_text(renderer, "kills", font, 400, 10);
+        char host_wins[10] = {};
+        char participant_wins[10] = {};
+        sprintf(host_wins, "%d",players[0].win/5 );
+        sprintf(participant_wins, "%d",players[0].win%5 );
+        disp_text(renderer, "HOST WINS", font2, 48, 670);
+        disp_text(renderer, host_wins, font2, 70, 690);
+        disp_text(renderer, "PARTICIPANT WINS", font2, 750, 670);
+        disp_text(renderer, participant_wins, font2, 900,690);
         for (i = 0; i <= number_of_players; i++) {
             char kills[10] = {};
             sprintf(kills, "%d", players[i].kills);
@@ -497,35 +472,6 @@ int main(int argc, char** argv){
             SDL_RenderCopy(renderer, bullet, NULL, &bullet_pos);
         }
 
-
-        
-        /*
-        unsigned int current_time= SDL_GetTicks();
-        
-        
-             if((current_time- last_time)>POWERUP_SPAWNTIME){
-                last_time= current_time;
-                check =check+1;
-                int a= (rand()%15)+1;
-                powerup_pos_arr[(check-1)%MAX_POWERUP]= a;
-            }
-        */
-        /*
-             for(int i=0; i<MAX_POWERUP; i++){
-                int a= rand()%15;
-                int b= rand()%20;
-                // for(int j=0; j<15; j++ ){
-                //     for(int k=0; k<20; k++){
-                //     }
-                // }
-                if(powerup_pos_arr[i]!=0){
-                    powerup_pos.x= 23+ powerup_pos_arr[i%MAX_POWERUP] *10;
-                    powerup_pos.y= 23+ powerup_pos_arr[i%MAX_POWERUP] *10;
-                    SDL_RenderCopy(renderer, powerup, NULL, &powerup_pos);
-                }
-                //else {break;}
-            }
-        */
 
         for(int i=0; i< MAX_POWERUP; i++){
 
@@ -563,23 +509,41 @@ int main(int argc, char** argv){
             
         }
 
+        for(int i=0; i<=number_of_players; i++){
+            if (i == 0)
+            {   if(players[i].face == -1){
+                //left
+                    SDL_RenderCopy(renderer, tex1_left, NULL, &players[i].position);
+                }else if(players[i].face == 1){
+                    //right
+                    SDL_RenderCopy(renderer, tex1_right, NULL, &players[i].position);
+                }else if(players[i].face == -2){
+                    //up
+                    SDL_RenderCopy(renderer, tex1_up, NULL, &players[i].position);
+                }else{
+                    //down
+                    SDL_RenderCopy(renderer, tex1_down, NULL, &players[i].position);
+                }
+                // SDL_RenderCopy(renderer, tex1, NULL, &players[i].position);
+            }else{
+                if(players[i].face == -1){
+                    SDL_RenderCopy(renderer, tex2_left, NULL, &players[i].position);
+                //left
+                }else if(players[i].face == 1){
+                    //right
+                    SDL_RenderCopy(renderer, tex2_right, NULL, &players[i].position);
+                }else if(players[i].face == -2){
+                    //up
+                    SDL_RenderCopy(renderer, tex2_up, NULL, &players[i].position);
+                }else{
+                    //down
+                    SDL_RenderCopy(renderer, tex2_down, NULL, &players[i].position);
+                }
+                // SDL_RenderCopy(renderer, tex2, NULL, &players[i].position);
+            }
+            
+        }
 
-
-        
-
-        //-----------
-        //Print the display here-
-
-        //for player server- print players[0].win/5
-        //for player client- print players[0].win%5
-        
-
-
-
-
-        //----------
-
-        // disp_text(renderer, "power", font, 520, 10);
         for (i = 0; i <= number_of_players; i++) {
             char powers[10] = {};
             sprintf(powers, "%d", players[i].powerup_a);
@@ -601,7 +565,7 @@ int main(int argc, char** argv){
         
         SDL_RenderCopy(renderer,finish_texture, NULL, NULL);
         
-        disp_text(renderer, "Player CLIENT WON!", title, 240, 310);
+        disp_text(renderer, "PARTICIPANT WON!", title, 250, 310);
         SDL_RenderPresent(renderer);
     }else{
         SDL_RenderClear(renderer);
@@ -610,7 +574,7 @@ int main(int argc, char** argv){
         // SDL_FreeSurface(finish_bg);
         SDL_RenderCopy(renderer,finish_texture, NULL, NULL);
         // TTF_Font title = TTF_OpenFont("resources/m5x7.ttf", 92);
-        disp_text(renderer, "Player SERVER WON!", title, 240, 310);
+        disp_text(renderer, "HOST WON!", title, 350, 310);
         SDL_RenderPresent(renderer);
     }
     usleep(5000000);
