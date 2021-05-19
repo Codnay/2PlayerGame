@@ -72,6 +72,37 @@ void how_to_play(SDL_Renderer *renderer, char *menu, TTF_Font *font){
     }
 }
 
+void fix_or_random(SDL_Renderer *renderer, char *menu, TTF_Font *font){
+    SDL_Event e;
+    int pressed = false;
+    while (!pressed) {
+        if (SDL_PollEvent(&e)) {
+            if (e.type == SDL_KEYDOWN) {
+                if (e.key.keysym.sym == SDLK_d) {
+                    *menu = 'd';
+                    pressed = true;
+                } else if (e.key.keysym.sym == SDLK_n) {
+                    *menu = 'n';
+                    pressed = true;
+                }
+            }
+        }
+        usleep(200);
+        SDL_RenderClear(renderer);
+        // background = SDL_LoadBMP("resources/car.bmp");
+        // background_texture = SDL_CreateTextureFromSurface(renderer, background);
+        // SDL_FreeSurface(background);
+        SDL_RenderCopy(renderer,background_texture, NULL, NULL);
+        // title_deathrace = TTF_OpenFont("resources/m5x7.ttf", 160);
+        disp_text(renderer, "DeathRace", title_deathrace, 275, 20);
+        disp_text(renderer, "[D]oomTrack", font, 390, 340);
+        disp_text(renderer, "OR", font, 450, 400);
+        disp_text(renderer, "[N]ew Map", font, 390, 460);
+        // disp_text(renderer, "[h]ow to play?", font, 375, 600);
+        SDL_RenderPresent(renderer);
+    }
+}
+
 void ask_for_ip(SDL_Renderer *renderer, TTF_Font *font, char *ip) {
     memset(ip, ' ', 15);
     SDL_Event e;
@@ -108,7 +139,7 @@ void ask_for_ip(SDL_Renderer *renderer, TTF_Font *font, char *ip) {
         SDL_RenderCopy(renderer,background_texture, NULL, NULL);
         // title = TTF_OpenFont("resources/m5x7.ttf", 160);
         disp_text(renderer, "DeathRace", title_deathrace, 275, 20);
-        disp_text(renderer, "ip addres", font, 375, 400);
+        disp_text(renderer, "ip address", font, 375, 400);
         disp_text(renderer, ip, font, 375, 460);
         SDL_RenderPresent(renderer);
     }
