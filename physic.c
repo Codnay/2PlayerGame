@@ -644,4 +644,4 @@ int check_empty(int x_coor, int y_coor){
         return 1;
     }
 }
-    
+   
