@@ -251,8 +251,8 @@ void* server_send_loop(void *arg) {
                             //printf("This is the enter a: %d\n", a);
                             //printf("This is the enter b: %d\n", b);
                             if(check_empty(b,a)==1){
-                                players[0].powerup_pos_arrx[check_if_powerup_collect(&players_server[i], &powerup_list)]= a*48+22;
-                                players[0].powerup_pos_arry[check_if_powerup_collect(&players_server[i], &powerup_list)]= b*48+22;
+                                players[0].powerup_pos_arrx[check_if_powerup_collect(&players_server[i], &powerup_list)]= a*48+12;
+                                players[0].powerup_pos_arry[check_if_powerup_collect(&players_server[i], &powerup_list)]= b*48+12;
                                 temp1= temp1+1;
                             }
 
@@ -282,8 +282,8 @@ void* server_send_loop(void *arg) {
                             //printf("This is the enter a: %d\n", a);
                             //printf("This is the enter b: %d\n", b);
                             if(check_empty(b,a)==1){
-                                players[0].powerup_pos_arrx[check_if_powerup_collect(&players_server[i], &powerup_list)]= a*48+15;
-                                players[0].powerup_pos_arry[check_if_powerup_collect(&players_server[i], &powerup_list)]= b*48+15;
+                                players[0].powerup_pos_arrx[check_if_powerup_collect(&players_server[i], &powerup_list)]= a*48+12;
+                                players[0].powerup_pos_arry[check_if_powerup_collect(&players_server[i], &powerup_list)]= b*48+12;
                                 temp1= temp1+1;
                             }
 
@@ -312,8 +312,8 @@ void* server_send_loop(void *arg) {
                             //printf("This is the enter a: %d\n", a);
                             //printf("This is the enter b: %d\n", b);
                             if(check_empty(b,a)==1){
-                                players[0].powerup_pos_arrx[check_if_powerup_collect(&players_server[i], &powerup_list)]= a*48+15;
-                                players[0].powerup_pos_arry[check_if_powerup_collect(&players_server[i], &powerup_list)]= b*48+15;
+                                players[0].powerup_pos_arrx[check_if_powerup_collect(&players_server[i], &powerup_list)]= a*48+12;
+                                players[0].powerup_pos_arry[check_if_powerup_collect(&players_server[i], &powerup_list)]= b*48+12;
                                 temp1= temp1+1;
                             }
 
