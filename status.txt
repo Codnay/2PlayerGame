@@ -1,0 +1,5 @@
+Status- 
+
+Our game successfully compiles and runs most of the times but sometimes, if the PC is slow or there are other processes like virtual meet running on the PC, it hangs the PC.
+
+The game can be played on different devices using Hamachi platform (This doesn't require a public API) 

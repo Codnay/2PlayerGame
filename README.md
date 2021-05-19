@@ -3,7 +3,7 @@
 ## Pranay Gupta 2019CS10383
 
 ## This is a two player racing game.
-To run the game on your device enter the folder containing all the files and rn the followng commands:
+To run the game on your device enter the folder containing all the files and run the followng commands:
 
 ```make```
 ```./game```
@@ -26,3 +26,8 @@ brew install sdl2
 brew install sdl2_image
 brew install sdl2_mixer
 brew install sdl2_ttf
+
+## Sources used to get the ideas -
+https://lazyfoo.net/tutorials/SDL/index.php
+https://github.com/maciejspychala/sdl-game
+https://en.wikipedia.org/wiki/User:Dllu/Maze
