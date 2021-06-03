@@ -256,8 +256,8 @@ int main(int argc, char** argv){
     powerC = load_texture(renderer, "resources/shield.bmp");
 
 
-    init();
-    loadMedia();
+    //init();
+    //loadMedia();
 
     int i;
     background = SDL_LoadBMP("resources/car.bmp");
@@ -375,7 +375,7 @@ int main(int argc, char** argv){
                 break;
             }
             resolve_keyboard(e, &players[my_id]);
-            start(e);
+            //start(e);
         }
 
         if(temp<10){
@@ -446,15 +446,15 @@ int main(int argc, char** argv){
             // else{
         
             
-        //}
-        char host_wins[10] = {};
-        char participant_wins[10] = {};
-        sprintf(host_wins, "%d",players[0].win/5 );
-        sprintf(participant_wins, "%d",players[0].win%5 );
-        disp_text(renderer, "HOST WINS", font2, 48, 670);
-        disp_text(renderer, host_wins, font2, 70, 690);
-        disp_text(renderer, "PARTICIPANT WINS", font2, 750, 670);
-        disp_text(renderer, participant_wins, font2, 900,690);
+        // //}
+        // char host_wins[10] = {};
+        // char participant_wins[10] = {};
+        // sprintf(host_wins, "%d",players[0].win/5 );
+        // sprintf(participant_wins, "%d",players[0].win%5 );
+        // disp_text(renderer, "HOST WINS", font2, 48, 670);
+        // disp_text(renderer, host_wins, font2, 70, 690);
+        // disp_text(renderer, "PARTICIPANT WINS", font2, 750, 670);
+        // disp_text(renderer, participant_wins, font2, 900,690);
         for (i = 0; i <= number_of_players; i++) {
             char kills[10] = {};
             sprintf(kills, "%d", players[i].kills);
@@ -555,8 +555,8 @@ int main(int argc, char** argv){
         SDL_RenderPresent(renderer);
     }
 
-    Mix_HaltMusic();
-    loadMedia2();
+    //Mix_HaltMusic();
+    //loadMedia2();
     SDL_Surface *finish_bg = SDL_LoadBMP("resources/end.bmp");
     SDL_Texture *finish_texture = SDL_CreateTextureFromSurface(renderer, finish_bg);
     SDL_FreeSurface(finish_bg);
